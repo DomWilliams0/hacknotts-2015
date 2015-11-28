@@ -6,6 +6,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -24,10 +26,23 @@ public class SpriteSheets {
 
     public static void loadAll(File directory) {
         // watch ur input
-        if (!directory.isDirectory())
-            throw new IllegalArgumentException("Must be directory");
+        if (!(directory.exists() && directory.isDirectory()))
+            throw new IllegalArgumentException("Uh oh invalid directory");
 
-        // todo stop getting distracted
+        try {
+            Files.newDirectoryStream(directory.toPath(), "*.png").forEach((path -> {
+                String name = path.getFileName().toString();
+                int extIndex = name.lastIndexOf('.');
+                if (extIndex >= 0)
+                    name = name.substring(0, extIndex);
+
+                load(path.getFileName().toString(), name);
+
+            }));
+        } catch (IOException e) {
+            System.err.println("Could not load spritesheets from " + directory.getPath());
+            e.printStackTrace();
+        }
 
     }
 
