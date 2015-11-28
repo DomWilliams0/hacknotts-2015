@@ -46,9 +46,9 @@ public class Animations {
 
     }
 
-    public static void load(String fileName, String nickName) {
+    public static void load(String fileName, String nickname) {
         // already loaded
-        if (INSTANCE.sheets.containsKey(nickName))
+        if (INSTANCE.sheets.containsKey(nickname))
             return;
 
         Path file = Paths.get(Constants.SPRITESHEET_PATH, fileName);
@@ -57,8 +57,8 @@ public class Animations {
 
         try {
             SpriteSheet spriteSheet = new SpriteSheet(file.toString(), Constants.SPRITESHEET_HUMAN_SIZE, Constants.SPRITESHEET_HUMAN_SIZE);
-            INSTANCE.sheets.put(nickName, spriteSheet);
-            System.out.println("Loaded spritesheet '" + nickName + "'");
+            INSTANCE.sheets.put(nickname, spriteSheet);
+            System.out.println("Loaded spritesheet '" + nickname + "'");
 
         } catch (SlickException e) {
             System.err.println("Could not load spritesheet: " + e.getMessage());
@@ -66,9 +66,9 @@ public class Animations {
         }
     }
 
-    public static Animation[] createAnimations(String nickName, int duration) {
+    public static Animation[] createAnimations(String nickname, int duration) {
         // todo load
-        SpriteSheet sheet = INSTANCE.sheets.get(nickName);
+        SpriteSheet sheet = INSTANCE.sheets.get(nickname);
 
         // not loaded
         if (sheet == null)
