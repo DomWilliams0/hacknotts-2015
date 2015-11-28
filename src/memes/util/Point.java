@@ -41,4 +41,12 @@ public class Point {
     public void translate(double x, double y) {
         translate(this, x, y);
     }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
