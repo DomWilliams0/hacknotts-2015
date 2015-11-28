@@ -7,7 +7,6 @@ public class Human extends BaseEntity {
 
     private String username;
 
-
     public Human(Point position, String username) {
         super(position, Constants.TILE_SIZE / 8, Constants.TILE_SIZE);
         this.username = username;
