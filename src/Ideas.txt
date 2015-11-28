@@ -1,0 +1,39 @@
+<<----------IDEAS---------->>
+<<------------------------->>
+
+>> Multiplayer game taking place within an office.
+
+>> The goal is to create a better program than your
+   competitors (the other players). You'e going to 
+   have to play dirty to do this.
+
+>> You start off by your desk in an office. 
+
+>> You have to keep your "Caffeination" bar 
+   from hitting 0 or you will fall asleep 
+   and lose a few hours of game time. 
+
+>> You also have to keep your motivation bar
+   up by sitting on the sofas etc.
+
+>> Finally, you need to be doing work at your
+   computer to make progress on your program.
+
+>> The coffee machines and sofas should be far
+   away from the PCs - this means that other
+   players will be able to either sabotage your
+   work (causing you to lose progress), or they
+   can steal your work (causing them to gain progress).
+
+>> Periodically your manager will walk in, and if you
+   aren't working at your desk, he will spend an hour
+   or so disciplining you, causing you to lose time.
+
+>> At the end of each <week??> you'll either get
+   praised for creating a great program (maybe have
+   the top x people getting this??), and the player
+   that makes the worst program will be fired (and
+   kicked from the game).
+
+>> You can attempt to incapacitate other players, 
+   and put them into a closet or something.
