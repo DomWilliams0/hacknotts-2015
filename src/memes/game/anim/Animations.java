@@ -13,14 +13,14 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class SpriteSheets {
+public class Animations {
 
-    private static SpriteSheets INSTANCE = new SpriteSheets();
+    private static Animations INSTANCE = new Animations();
 
     private Map<String, SpriteSheet> sheets;
 
     // no instantiation pls
-    private SpriteSheets() {
+    private Animations() {
         sheets = new TreeMap<>();
     }
 
