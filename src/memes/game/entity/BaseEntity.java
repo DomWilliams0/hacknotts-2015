@@ -62,6 +62,10 @@ public abstract class BaseEntity implements Serializable {
         return movementDirection;
     }
 
+    public int getCurrentMoveSpeed() {
+        return currentMoveSpeed;
+    }
+
     public boolean isMoving() {
         return moveSpeed != 0;
     }
