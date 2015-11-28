@@ -66,15 +66,25 @@ public class Animations {
         }
     }
 
-    public static Animation createAnimation(String nickName) {
+    public static Animation[] createAnimations(String nickName, int duration) {
+        // todo load
         SpriteSheet sheet = INSTANCE.sheets.get(nickName);
 
         // not loaded
         if (sheet == null)
             return null;
 
-//        return new Animation(sheet, 0, 0, 0, 0, true, 0, true);
-        throw new UnsupportedOperationException("pls wait");
+        Animation[] anims = new Animation[sheet.getVerticalCount()];
+
+        // load each animation
+        for (int i = 0; i < anims.length; i++) {
+            anims[i] = new Animation(sheet, 0, i,
+                    sheet.getHorizontalCount() - 1,
+                    i + 1, true, duration, true);
+        }
+
+
+        return anims;
     }
 
 }
