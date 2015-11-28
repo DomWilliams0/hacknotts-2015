@@ -3,11 +3,11 @@ package memes.game.entity;
 import memes.util.Constants;
 import memes.util.Point;
 
-public class Human extends BaseEntity {
+public class HumanEntity extends BaseEntity {
 
     private String username;
 
-    public Human(Point position, String username) {
+    public HumanEntity(Point position, String username) {
         super(position, Constants.TILE_SIZE / 8, Constants.TILE_SIZE);
         this.username = username;
     }
