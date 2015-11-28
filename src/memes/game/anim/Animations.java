@@ -24,6 +24,10 @@ public class Animations {
         sheets = new TreeMap<>();
     }
 
+    public static void loadAll() {
+        loadAll(new File(Constants.SPRITESHEET_PATH));
+    }
+
     public static void loadAll(File directory) {
         // watch ur input
         if (!(directory.exists() && directory.isDirectory()))
@@ -67,7 +71,6 @@ public class Animations {
     }
 
     public static Animation[] createAnimations(String nickname, int duration) {
-        // todo load
         SpriteSheet sheet = INSTANCE.sheets.get(nickname);
 
         // not loaded
