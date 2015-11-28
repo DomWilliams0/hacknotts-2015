@@ -1,7 +1,7 @@
 package memes.game.entity;
 
 import memes.util.Constants;
-import org.lwjgl.util.Point;
+import memes.util.Point;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
@@ -26,7 +26,7 @@ public abstract class BaseEntity implements Serializable {
     protected int moveSpeed;
 
     public BaseEntity(Point position, int moveSpeed, int size) {
-        this.aabb = new Rectangle(position.getX(), position.getY(), size, size);
+        this.aabb = new Rectangle(position.getIntX(), position.getIntY(), size, size);
         this.position = position;
         this.moveSpeed = moveSpeed;
         id = LASTID++;

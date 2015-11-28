@@ -1,7 +1,7 @@
 package memes.game.entity;
 
 import memes.util.Constants;
-import org.lwjgl.util.Point;
+import memes.util.Point;
 
 public class Human extends BaseEntity {
 
