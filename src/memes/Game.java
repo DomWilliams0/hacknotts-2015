@@ -3,8 +3,6 @@ package memes;
 import memes.gen.StaticOfficeGenerator;
 import memes.render.WorldRenderer;
 import memes.world.World;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.GLContext;
 import org.newdawn.slick.*;
 
 public class Game extends BasicGame {
@@ -20,8 +18,6 @@ public class Game extends BasicGame {
 
         try {
             AppGameContainer container = new AppGameContainer(this, 1280, 720, false);
-            World world = (new StaticOfficeGenerator()).genWorld(19, 5);
-            r = new WorldRenderer(world);
             container.start();
         } catch (SlickException e) {
             System.err.println("Failed to start game: " + e.getMessage());
@@ -32,6 +28,8 @@ public class Game extends BasicGame {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
+        World world = (new StaticOfficeGenerator()).genWorld(19, 5);
+        r = new WorldRenderer(world);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class Game extends BasicGame {
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-        if(r != null) r.render(0, 0);
+        if (r != null) r.render(0, 0);
         else System.out.println("oops m8");
     }
 
