@@ -1,6 +1,7 @@
 package memes.gen;
 
 import memes.world.Tile;
+import memes.world.TileType;
 import memes.world.World;
 
 import java.io.File;
@@ -21,8 +22,8 @@ public class StaticOfficeGenerator implements Generator {
                 char[] line = in.nextLine().toCharArray();
                 if (line.length != xSize)
                     throw new IllegalStateException("Line length of office file is not equal to xSize");
-                for (int i = 0; i < line.length; i++) {
-                    tiles[y][x++] = new Tile(getTileType(line[i]));
+                for (char aLine : line) {
+                    tiles[y][x++] = new Tile(getTileType(aLine));
                 }
                 y++;
                 // If we are at ySize, then stop reading the file
@@ -35,16 +36,16 @@ public class StaticOfficeGenerator implements Generator {
         return world;
     }
 
-    private Tile.TileType getTileType(char ch) {
+    private TileType getTileType(char ch) {
         switch (ch) {
             case 'n':
-                return Tile.TileType.FLOOR;
+                return TileType.FLOOR;
             case 'd':
-                return Tile.TileType.DESK;
+                return TileType.DESK;
             case 'w':
-                return Tile.TileType.WALL;
+                return TileType.WALL;
             case 'c':
-                return Tile.TileType.COMPUTER;
+                return TileType.COMPUTER;
             default:
                 System.err.println("Unrecognised tile character: " + ch);
                 return null;
