@@ -1,11 +1,16 @@
 package memes.world;
 
+import memes.game.entity.BaseEntity;
+import memes.util.Point;
+
+import java.util.HashMap;
 import java.util.Optional;
 
 public class World {
 
     private Tile[][] tiles;
     private int xSize, ySize;
+    private HashMap<Point, BaseEntity> entities = new HashMap<>();
 
     public World(Tile[][] tiles, int xSize, int ySize) {
         this.tiles = tiles;
@@ -24,6 +29,17 @@ public class World {
                 tiles[y][x].initMetadata(x, y, this);
             }
         }
+    }
+
+    public boolean spawnEntity(Point p, BaseEntity e) {
+        if (entities.containsKey(p)) {
+            entities.put(p, e);
+            return true;
+        } else return false;
+    }
+
+    public Optional<BaseEntity> getEntity(Point p) {
+        return entities.containsKey(p) ? Optional.of(entities.get(p)) : Optional.empty();
     }
 
     public int getXSize() {
