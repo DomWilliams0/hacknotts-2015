@@ -26,8 +26,9 @@
    can steal your work (causing them to gain progress).
 
 >> Periodically your manager will walk in, and if you
-   aren't working at your desk, he will spend an hour
-   or so disciplining you, causing you to lose time.
+   aren't at your desk, he will spend an hour or so
+    disciplining you, causing you to lose time.
+    (Or if you're asleep at your desk you'll get fired).
 
 >> At the end of each <week??> you'll either get
    praised for creating a great program (maybe have
@@ -37,3 +38,16 @@
 
 >> You can attempt to incapacitate other players, 
    and put them into a closet or something.
+
+>> Before you join a game you should have to define
+   a username, and this will be displayed as a 
+   label by your PC (helps you to find where you're
+   meant to be).
+
+>> You should be able to sabotage the coffee machine and
+   sofas to hinder other players too.
+
+>> Nerf guns to fire at players to make them lose 
+   motivation, and interrupt their working?
+
+
