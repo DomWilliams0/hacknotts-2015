@@ -24,9 +24,9 @@ public class Tile {
         COMPUTER((x, y, world) -> new TileMetadata.ComputerMetadata(x, y, world));
 
         // This defines how the tile type's metadata is constructed
-        public MetadataFactory factory;
+        public TileMetadata.MetadataFactory factory;
 
-        TileType(MetadataFactory factory) {
+        TileType(TileMetadata.MetadataFactory factory) {
             this.factory = factory;
         }
 

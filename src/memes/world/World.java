@@ -11,13 +11,14 @@ public class World {
         this.tiles = tiles;
         this.xSize = xSize;
         this.ySize = ySize;
+        initTiles();
     }
 
     /**
      * Initialises the metadata for each of the world's tiles.
      * Must be called after the world has been generated.
      */
-    public void initTiles() {
+    private void initTiles() {
         for (int y = 0; y < tiles.length; y++) {
             for (int x = 0; x < tiles[y].length; x++) {
                 tiles[y][x].initMetadata(x, y, this);

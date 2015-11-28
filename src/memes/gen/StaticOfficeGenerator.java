@@ -32,7 +32,6 @@ public class StaticOfficeGenerator implements Generator {
             e.printStackTrace();
         }
         World world = new World(tiles, xSize, ySize);
-        world.initTiles();
         return world;
     }
 

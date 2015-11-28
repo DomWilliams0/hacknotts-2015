@@ -7,6 +7,12 @@ package memes.world;
  */
 public abstract class TileMetadata {
 
+    public interface MetadataFactory {
+
+        TileMetadata getMetadata(int x, int y, World world);
+
+    }
+
     public static class FloorMetadata extends TileMetadata {
 
         public boolean a, b, c, d;
