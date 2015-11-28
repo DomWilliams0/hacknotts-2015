@@ -20,11 +20,9 @@ public class Game extends BasicGame {
 
         try {
             AppGameContainer container = new AppGameContainer(this, 1280, 720, false);
-
             World world = (new StaticOfficeGenerator()).genWorld(19, 5);
             r = new WorldRenderer(world);
             container.start();
-
         } catch (SlickException e) {
             System.err.println("Failed to start game: " + e.getMessage());
             e.printStackTrace();

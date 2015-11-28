@@ -22,9 +22,7 @@ public class StaticOfficeGenerator implements Generator {
                 char[] line = in.nextLine().toCharArray();
                 if (line.length != xSize)
                     throw new IllegalStateException("Line length of office file is not equal to xSize");
-                for (char aLine : line) {
-                    tiles[y][x++] = new Tile(getTileType(aLine));
-                }
+                for (char aLine : line) tiles[y][x++] = new Tile(getTileType(aLine));
                 y++;
                 // If we are at ySize, then stop reading the file
                 if (y == ySize) break;
@@ -32,8 +30,7 @@ public class StaticOfficeGenerator implements Generator {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        World world = new World(tiles, xSize, ySize);
-        return world;
+        return new World(tiles, xSize, ySize);
     }
 
     private TileType getTileType(char ch) {

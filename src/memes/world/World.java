@@ -31,6 +31,12 @@ public class World {
         }
     }
 
+    /**
+     * Add an entity to the world, note that this will overwrite an entities at the same Point
+     * @param p - The point at which to spawn the entity
+     * @param e - The entity to spawn
+     * @return True if the an entity existed at the point, otherwise false
+     */
     public boolean spawnEntity(Point p, BaseEntity e) {
         if (entities.containsKey(p)) {
             entities.put(p, e);
@@ -38,6 +44,11 @@ public class World {
         } else return false;
     }
 
+    /**
+     * Returns the entity at the specified Point
+     * @param p - The point
+     * @return Optional.empty() if there is no entity at that point
+     */
     public Optional<BaseEntity> getEntity(Point p) {
         return entities.containsKey(p) ? Optional.of(entities.get(p)) : Optional.empty();
     }
@@ -50,8 +61,14 @@ public class World {
         return ySize;
     }
 
+    /**
+     * Returns the tile at the specified coordinates
+     * @param x - The x coord
+     * @param y - The x coord
+     * @return Optional.empty() if the x and y coords are out of bounds
+     */
     public Optional<Tile> getTile(int x, int y) {
-        return x < xSize && y < ySize ? Optional.of(tiles[x][y]) : Optional.<Tile>empty();
+        return x < xSize && y < ySize && x >= 0 && y >= 0 ? Optional.of(tiles[x][y]) : Optional.<Tile>empty();
     }
 
 }
