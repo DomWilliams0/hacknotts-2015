@@ -5,7 +5,9 @@ import org.lwjgl.util.Point;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
-public abstract class BaseEntity {
+import java.io.Serializable;
+
+public abstract class BaseEntity implements Serializable {
 
     private static long LASTID = 0;
 
