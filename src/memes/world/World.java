@@ -13,6 +13,18 @@ public class World {
         this.ySize = ySize;
     }
 
+    /**
+     * Initialises the metadata for each of the world's tiles.
+     * Must be called after the world has been generated.
+     */
+    public void initTiles() {
+        for (int y = 0; y < tiles.length; y++) {
+            for (int x = 0; x < tiles[y].length; x++) {
+                tiles[y][x].initMetadata(x, y, this);
+            }
+        }
+    }
+
     public int getXSize() {
         return xSize;
     }

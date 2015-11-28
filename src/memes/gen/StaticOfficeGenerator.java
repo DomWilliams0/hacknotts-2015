@@ -11,7 +11,7 @@ public class StaticOfficeGenerator implements Generator {
 
     @Override
     public World genWorld(int xSize, int ySize) {
-        if (xSize < 0 || ySize < 0) throw new IllegalArgumentException("Int arguments cannot be less than 0");
+        if (xSize < 0 || ySize < 0) throw new IllegalArgumentException("The int arguments cannot be less than 0");
         Tile[][] tiles = new Tile[xSize][ySize];
         try {
             Scanner in = new Scanner(new File("res/office.txt"));
@@ -31,7 +31,9 @@ public class StaticOfficeGenerator implements Generator {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return new World(tiles, xSize, ySize);
+        World world = new World(tiles, xSize, ySize);
+        world.initTiles();
+        return world;
     }
 
     private Tile.TileType getTileType(char ch) {
