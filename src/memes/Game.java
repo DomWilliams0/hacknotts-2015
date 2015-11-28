@@ -23,12 +23,13 @@ public class Game extends BasicGame {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
-
     }
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
 
+        float delta = (float) i / 1000;
+        // todo tick world
     }
 
     @Override
