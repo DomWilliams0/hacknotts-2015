@@ -1,7 +1,5 @@
 package memes;
 
-import memes.game.entity.Human;
-import memes.util.Point;
 import org.newdawn.slick.*;
 
 public class Game extends BasicGame {
@@ -25,7 +23,6 @@ public class Game extends BasicGame {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
-        System.out.println(new Human(new Point(5,5), "potato"));
     }
 
     @Override
