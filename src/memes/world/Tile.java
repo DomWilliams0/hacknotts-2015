@@ -1,5 +1,8 @@
 package memes.world;
 
+/**
+ * Represents an instance of a tile that can be of any TileType
+ */
 public class Tile {
 
     public TileType type;
@@ -15,9 +18,14 @@ public class Tile {
     }
 
     public enum TileType {
-        FLOOR, DESK, WALL
+        FLOOR, DESK, WALL, COMPUTER
     }
 
+    /**
+     * Represents metadata that is specific to tile types, and belongs to a tile object.
+     * This could store the amount of coffee left in a specific tile instance,
+     * or the development progress of a certain computer
+     */
     public abstract class TileMetadata {
 
     }

@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class OfficeGenerator implements Generator {
+public class StaticOfficeGenerator implements Generator {
 
     @Override
     public World genWorld(int xSize, int ySize) {
@@ -20,7 +20,7 @@ public class OfficeGenerator implements Generator {
                 // Read line as chars and convert them to tiles
                 char[] line = in.nextLine().toCharArray();
                 if (line.length != xSize)
-                    throw new IllegalStateException("Office file line length is not equal to xSize");
+                    throw new IllegalStateException("Line length of office file is not equal to xSize");
                 for (int i = 0; i < line.length; i++) {
                     tiles[y][x++] = new Tile(getTileType(line[i]));
                 }
@@ -42,6 +42,8 @@ public class OfficeGenerator implements Generator {
                 return Tile.TileType.DESK;
             case 'w':
                 return Tile.TileType.WALL;
+            case 'c':
+                return Tile.TileType.COMPUTER;
             default:
                 System.err.println("Unrecognised tile character: " + ch);
                 return null;

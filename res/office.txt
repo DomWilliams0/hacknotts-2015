@@ -1,0 +1,13 @@
+wwwwwwwwwwwwwwwwwww
+wffffffffwmffffftfw
+wcdfcdfcdwffffffffw
+wffffffffaffffffffw
+wwwwwwwwwwwwwwwwwww
+19x5
+w = wall
+f = floor
+c = computer
+m = coffee machine
+t = clock
+d = desk
+a = door
