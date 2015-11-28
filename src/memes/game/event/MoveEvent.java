@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class MoveEvent implements Packet, Serializable {
     private long entityID;
     private double x, y;
-    private int speed
+    private int speed;
     private Direction direction;
     private boolean isMoveStart;
 
@@ -38,12 +38,9 @@ public class MoveEvent implements Packet, Serializable {
     public int getSpeed() {
         return speed;
     }
-    
+
     @Override
     public PacketType getPacketType() {
         return isMoveStart ? PacketType.StartMove : PacketType.EndMove;
-    }
-    public long getID() {
-        return entityID;
     }
 }
