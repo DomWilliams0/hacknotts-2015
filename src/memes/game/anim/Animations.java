@@ -83,7 +83,7 @@ public class Animations {
         for (int i = 0; i < anims.length; i++) {
             anims[i] = new Animation(sheet, 0, i,
                     sheet.getHorizontalCount() - 1,
-                    i + 1, true, duration, true);
+                    i, true, duration, true);
         }
 
 
