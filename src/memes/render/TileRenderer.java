@@ -8,7 +8,7 @@ import org.newdawn.slick.Image;
 public interface TileRenderer {
 
     // The standard tile renderer, just draws the image
-    TileRenderer standardRenderer = (img, x, y) -> img.draw(x, y);
+    TileRenderer standardRenderer = Image::draw;
 
     void render(Image img, float x, float y);
 
