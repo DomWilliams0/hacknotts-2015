@@ -15,8 +15,8 @@ public class HumanEntity extends BaseEntity {
     private String username;
     private HumanAnimation animation;
 
-    public HumanEntity(Point position, String username) {
-        super(position, Constants.TILE_SIZE * 4, Constants.TILE_SIZE);
+    public HumanEntity(long entityID, Point position, String username) {
+        super(entityID, position, Constants.TILE_SIZE * 4, Constants.TILE_SIZE);
         this.username = username;
         this.animation = new HumanAnimation("business_man");
     }

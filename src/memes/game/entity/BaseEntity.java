@@ -35,9 +35,9 @@ public abstract class BaseEntity implements GameObject, Serializable {
 
     protected World world;
 
-    public BaseEntity(Point position, int moveSpeed, int size) {
+    public BaseEntity(long entityID, Point position, int moveSpeed, int size) {
         this.aabb = new Rectangle(position.getIntX(), position.getIntY(), size, size);
-        this.id = LASTID++;
+        this.id = entityID;
         this.position = position;
 
         this.moveSpeed = moveSpeed;

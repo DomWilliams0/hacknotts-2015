@@ -7,8 +7,8 @@ import memes.game.event.InputEvent;
 import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
 import memes.game.world.World;
-import memes.game.world.gen.StaticOfficeGenerator;
 import memes.net.packet.PacketType;
+import memes.net.server.NetClient;
 import memes.util.Constants;
 import memes.util.Point;
 import org.newdawn.slick.*;
@@ -17,11 +17,15 @@ import javax.swing.*;
 
 public class Game extends BasicGame {
 
-    public World world;
     public static Game INSTANCE;
 
+    private NetClient client;
+    private PlayerEntity player;
+    private World world;
+
     public Game() {
-        // ALERT! Do not do any game initialisation in here, use init(GameContainer) instead (so that OpenGL is already initialised etc.)
+        // ALERT! Do not do any game initialisation in here, use
+        // init(GameContainer) instead (so that OpenGL is already initialised etc.)
 
         super("Memes and more memes");
         System.out.println("Game starting");
@@ -52,11 +56,15 @@ public class Game extends BasicGame {
         // load resources
         Animations.loadAll();
 
-        // init world
-        world = (new StaticOfficeGenerator()).genWorld(19, 5);
+        try {
+            client = NetClient.connectToServer(serverHost);
+            world = client.getServerWorld(client.getID(), username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // init player
-        PlayerEntity testPlayer = new PlayerEntity(new Point(640, 640), username);
+        PlayerEntity testPlayer = new PlayerEntity(123, "Testificate", new Point(640, 640));
         world.addEntity(testPlayer);
 
         // input

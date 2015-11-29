@@ -18,8 +18,8 @@ public class PlayerEntity extends HumanEntity implements IEventHandler {
     public int caffeineLevel = MAX_CAFFEINE;
     public TileMetadata.ComputerMetadata computer;
 
-    public PlayerEntity(Point position, String username) {
-        super(position, username);
+    public PlayerEntity(long entityID, String username, Point position) {
+        super(entityID, position, username);
         movementHandlers = new EventHandler<>();
         currentDirections = new BitSet(InputKey.DIRECTIONALS.length);
     }

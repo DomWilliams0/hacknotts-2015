@@ -1,11 +1,13 @@
 package memes.game.world;
 
+import java.io.Serializable;
+
 /**
  * Represents metadata that is specific to tile types, and belongs to a tile object.
  * This could store the amount of coffee left in a specific tile instance,
  * or the development progress of a certain computer
  */
-public abstract class TileMetadata {
+public abstract class TileMetadata implements Serializable {
 
     public interface MetadataFactory {
 

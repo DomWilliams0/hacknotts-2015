@@ -6,5 +6,6 @@ public enum PacketType {
     StartMove,
     EndMove,
     Input,
-    Action;
+    Action,
+    World;
 }

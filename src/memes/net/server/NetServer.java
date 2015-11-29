@@ -58,16 +58,14 @@ public class NetServer {
                 long id = System.nanoTime();
 
                 // TODO: Use actual client id
-                NetClient cs = new NetClient(accept, id);
+                NetClient cs = new NetClient(accept, id, true);
                 if (!cs.handshake(id)) {
                     cs.sendText("You are not a real client. Do one!");
                     cs.disconnect();
                     continue;
                 }
-                cs.start();
-                cs.addPacketHandler(System.out::println);
-
                 System.out.println("Client " + cs.getID() + " is connected");
+                cs.start();
 
                 clientSockets.add(cs);
                 clientMap.put(cs.getID(), cs);

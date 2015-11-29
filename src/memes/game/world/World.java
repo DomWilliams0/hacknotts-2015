@@ -3,12 +3,15 @@ package memes.game.world;
 import memes.game.entity.BaseEntity;
 import memes.game.render.WorldRenderer;
 import memes.util.GameObject;
+import memes.util.Point;
 import org.newdawn.slick.Graphics;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 
-public class World implements GameObject {
+public class World implements GameObject, Serializable {
 
     private Tile[][] tiles;
     private int xSize, ySize;
@@ -71,6 +74,18 @@ public class World implements GameObject {
      */
     public Optional<Tile> getTile(int x, int y) {
         return x < xSize && y < ySize && x >= 0 && y >= 0 ? Optional.of(tiles[x][y]) : Optional.<Tile>empty();
+    }
+
+    public Point getRandomSpawn(long seed) {
+        Random r = new Random(seed);
+        Optional<Tile> tile;
+        Point p = Point.EMPTY;
+        do {
+            p = new Point(r.nextInt(xSize), r.nextInt(ySize));
+            tile = getTile(p.getIntX(), p.getIntY());
+        } while (tile.isPresent() && tile.get().type == TileType.FLOOR);
+
+        return p;
     }
 
     /**

@@ -9,10 +9,9 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class StaticOfficeGenerator implements Generator {
+public class FileOfficeGenerator {
 
-    @Override
-    public World genWorld(int xSize, int ySize) {
+    public static World genWorld(int xSize, int ySize) {
         Tile[][] tiles = null;
         try {
             Scanner in = new Scanner(new File("res/office.txt"));

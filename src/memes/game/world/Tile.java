@@ -5,21 +5,23 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
+import java.io.Serializable;
+
 /**
  * Represents an instance of a tile that can be of any TileType
  */
-public class Tile {
+public class Tile implements Serializable {
 
     public static SpriteSheet sprites = null;
 
-    static {
+    /*static {
         try {
             sprites = new SpriteSheet(new Image("res/terrain/interior_transparent.png"),
                     Constants.TILE_LOAD_SIZE, Constants.TILE_LOAD_SIZE, 1, 0);
         } catch (SlickException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public TileType type;
     public TileMetadata metadata;

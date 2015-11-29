@@ -5,7 +5,9 @@ import memes.game.render.TileRenderer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public enum TileType {
+import java.io.Serializable;
+
+public enum TileType implements Serializable {
     FLOOR(
             // Metadata factory
             TileMetadata.FloorMetadata::new,
@@ -83,11 +85,11 @@ public enum TileType {
     public TileMetadata.MetadataFactory factory;
     public TileRenderer renderer;
     public TileActionListener onAction;
-    private Image img;
+    //private Image img;
 
     TileType(TileMetadata.MetadataFactory factory, TileRenderer renderer, TileActionListener onAction, int spriteX, int spriteY) {
         this.factory = factory;
-        this.img = Tile.sprites.getSprite(spriteX, spriteY);
+        //this.img = Tile.sprites.getSprite(spriteX, spriteY);
         this.renderer = renderer;
         this.onAction = onAction;
     }
@@ -98,11 +100,9 @@ public enum TileType {
 
     TileType(TileMetadata.MetadataFactory factory, TileActionListener onAction) {
         this(factory, TileRenderer.standardRenderer, onAction, 0, 0);
-        try {
-            img = new Image("res/terrain/" + this.name().toLowerCase() + ".png");
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+
+
+        //img = new Image("res/terrain/" + this.name().toLowerCase() + ".png");
     }
 
     TileType(TileMetadata.MetadataFactory factory, int spriteX, int spriteY) {
@@ -115,7 +115,7 @@ public enum TileType {
     }
 
     public void render(TileMetadata meta, float x, float y) {
-        renderer.render(img, x, y);
+        //renderer.render(img, x, y);
     }
 
     public static TileType getFromChar(char ch) {

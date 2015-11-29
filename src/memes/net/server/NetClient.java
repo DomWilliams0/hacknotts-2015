@@ -1,7 +1,11 @@
 package memes.net.server;
 
+import memes.game.entity.PlayerEntity;
+import memes.game.world.World;
 import memes.net.PacketHandler;
+import memes.net.packet.PlayerConnectPacket;
 import memes.net.packet.Packet;
+import memes.net.packet.WorldPacket;
 import memes.util.Constants;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -17,10 +21,13 @@ public class NetClient extends Thread {
     protected long clientID;
     protected List<PacketHandler> handlers;
 
-    public NetClient(Socket socket, long clientID) throws IOException {
+    private boolean isServer;
+
+    public NetClient(Socket socket, long clientID, boolean isServer) throws IOException {
         super("Client " + clientID);
 
         this.socket = socket;
+        this.isServer = isServer;
         this.clientID = clientID;
         this.handlers = new ArrayList<>();
     }
@@ -36,7 +43,26 @@ public class NetClient extends Thread {
                 if (!(o instanceof Packet))
                     throw new UnsupportedOperationException("Received object is not a Packet. Uh wat");
 
-                handlers.forEach(h -> h.onPacketReceive((Packet) o));
+                Packet packet = (Packet) o;
+
+                if (isServer) {
+                    if (packet instanceof PlayerConnectPacket) {
+                        PlayerConnectPacket connPacket = (PlayerConnectPacket) packet;
+
+                        World world = GameServer.INSTANCE.getWorld();
+                        PlayerEntity player = new PlayerEntity(
+                                connPacket.getID(),
+                                connPacket.getUsername(),
+                                world.getRandomSpawn(connPacket.getID()));
+
+                        world.addEntity(player);
+                        WorldPacket worldPacket = new WorldPacket(world);
+                    }
+
+
+                } else {
+                    handlers.forEach(h -> h.onPacketReceive(packet));
+                }
 
             } catch (IOException | ClassNotFoundException e) {
                 try {
@@ -83,10 +109,24 @@ public class NetClient extends Thread {
 
         System.out.println("client's id = " + id);
 
-        NetClient client = new NetClient(socket, id);
-        client.start();
+        return new NetClient(socket, id, false);
+    }
 
-        return client;
+    /**
+     * Sends a connect packet to the server
+     * and gets all the server details
+     *
+     * @param playerName
+     * @return a World instance in sync with the server
+     */
+    public World getServerWorld(long clientID, String playerName) throws Exception {
+        this.start();
+
+        PlayerConnectPacket connPacket = new PlayerConnectPacket(clientID, playerName);
+        sendPacket(connPacket);
+        // TODO: Send connection packet and get server data back
+
+        return null;
     }
 
     @Override
@@ -142,7 +182,8 @@ public class NetClient extends Thread {
     public void disconnect() {
         try {
             socket.close();
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
         // It really doesn't matter at this point
     }
 
