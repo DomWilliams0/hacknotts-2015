@@ -17,11 +17,13 @@ public enum TileType {
             TileMetadata.CoffeeMachineMetadata::new,
             (tile, player, sabotage) -> {
                 TileMetadata.CoffeeMachineMetadata meta = (TileMetadata.CoffeeMachineMetadata) tile.metadata;
-                if(sabotage) {
-                    if(!meta.sabotaged) meta.sabotaged = true;
+                if (sabotage) {
+                    if (!meta.sabotaged) meta.sabotaged = true;
                     System.out.printf("%s just sabotaged the coffee machine%n", player);
-                } else if(player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
-                    if(meta.sabotaged) {
+
+
+                } else if (player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
+                    if (meta.sabotaged) {
                         player.caffeineLevel = Math.max(player.caffeineLevel - 10, 0);
                         meta.sabotaged = false;
                         System.out.printf("%s just drank a shit coffee%n", player);
@@ -36,26 +38,37 @@ public enum TileType {
             TileMetadata.ComputerMetadata::new,
             (tile, player, sabotage) -> {
                 TileMetadata.ComputerMetadata meta = (TileMetadata.ComputerMetadata) tile.metadata;
-                if(meta.user == null) {
+
+                // no current user
+                if (meta.user == null) {
                     meta.user = player.getUsername();
                     player.computer = meta;
                     System.out.printf("%s is now bound to the computer%n", player);
-                } else {
-                    if(meta.user.equals(player.getUsername())) {
-                        meta.developmentProgress++;
-                        System.out.printf("%s just programmed on the computer%n", player);
-                    } else {
-                        if(sabotage) {
-                            meta.developmentProgress--;
-                            System.out.printf("%s just sabotaged the computer%n", player);
-                        } else {
-                            if(player.computer != null) {
-                                player.computer.developmentProgress++;
-                                System.out.printf("%s just stole some code! (sneaky bugger)%n", player);
-                            } else System.out.printf("%s is trying to steal code but they haven't been assigned a computer yet%n", player);
-                        }
-                    }
+                    return;
                 }
+
+                // programming on own computer
+                if (meta.user.equals(player.getUsername())) {
+                    meta.developmentProgress++;
+                    System.out.printf("%s just programmed on the computer%n", player);
+                    return;
+                }
+
+                // sabotaging
+                if (sabotage) {
+                    meta.developmentProgress--;
+                    System.out.printf("%s just sabotaged the computer%n", player);
+                    return;
+                }
+
+                // bastard
+                if (player.computer != null) {
+                    player.computer.developmentProgress++;
+                    System.out.printf("%s just stole some code! (sneaky bugger)%n", player);
+                    return;
+                }
+
+                System.out.printf("%s is trying to steal code but they haven't been assigned a computer yet%n", player);
             }
     );
 
