@@ -12,11 +12,11 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Server {
+public class NetServer {
     private ServerSocket servSocket;
 
-    private Map<Long, Client> clientMap;
-    private List<Client> clientSockets;
+    private Map<Long, NetClient> clientMap;
+    private List<NetClient> clientSockets;
     private Queue<Packet> sendQueue, recvQueue;
 
     private Thread listenThread;
@@ -24,7 +24,7 @@ public class Server {
 
     private boolean isRunning;
 
-    public Server(PacketHandler handler) throws IOException {
+    public NetServer(PacketHandler handler) throws IOException {
         this.handler = handler;
         this.isRunning = true;
         this.listenThread = new Thread(this::listen, "ServerThread");
@@ -51,7 +51,7 @@ public class Server {
                 long id = System.nanoTime();
 
                 // TODO: Use actual client id
-                Client cs = new Client(accept, id);
+                NetClient cs = new NetClient(accept, id);
                 if (!cs.handshake(id)) {
                     cs.sendText("You are not a real client. Do one!");
                     cs.disconnect();
@@ -82,7 +82,7 @@ public class Server {
             return;
         }
 
-        Client cs = clientMap.get(clientID);
+        NetClient cs = clientMap.get(clientID);
         if (cs == null)
             throw new IllegalArgumentException("Client doesn't exist. Wtf");
 
@@ -97,7 +97,7 @@ public class Server {
 
     public static void main(String[] args) throws InterruptedException {
         try {
-            Server server = new Server(System.out::println);
+            NetServer server = new NetServer(System.out::println);
             server.start();
 
             //Client c1 = Client.connectToServer("localhost");

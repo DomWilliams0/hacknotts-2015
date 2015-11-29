@@ -10,14 +10,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends Thread {
+public class NetClient extends Thread {
     protected Socket socket;
     protected ObjectInputStream ois;
     protected ObjectOutputStream oos;
     protected long clientID;
     protected List<PacketHandler> handlers;
 
-    public Client(Socket socket, long clientID) throws IOException {
+    public NetClient(Socket socket, long clientID) throws IOException {
         super("Client " + clientID);
 
         this.socket = socket;
@@ -60,7 +60,7 @@ public class Client extends Thread {
      * @return a Client connected to the Server
      * @throws IOException
      */
-    public static Client connectToServer(String host) throws IOException {
+    public static NetClient connectToServer(String host) throws IOException {
         Socket socket = new Socket(host, Constants.PORT_NUM);
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
         DataInputStream dis = new DataInputStream(socket.getInputStream());
@@ -83,7 +83,7 @@ public class Client extends Thread {
 
         System.out.println("client's id = " + id);
 
-        Client client = new Client(socket, id);
+        NetClient client = new NetClient(socket, id);
         client.start();
 
         return client;
