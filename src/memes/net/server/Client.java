@@ -9,7 +9,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Client extends Thread {
     protected Socket socket;
@@ -35,16 +34,32 @@ public class Client extends Thread {
     public static Client connect(String host) throws IOException {
         Socket socket = new Socket(host, Constants.PORT_NUM);
         OutputStream os = socket.getOutputStream();
-        InputStream is = socket.getInputStream();
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
 
+        // send client handshake
         os.write(Constants.HANDSHAKE_CLIENT.getBytes());
+
+        // receive and verify server handshake
         byte[] reply = new byte[Constants.HANDSHAKE_SERVER.length()];
-        int bytes = is.read(reply);
+        int replyLength = dis.read(reply);
 
-        if (bytes != reply.length)
-            return null;
+        // didn't receive full handshake
+        if (replyLength != reply.length)
+            throw new IllegalStateException("Did not receive full handshake from server");
 
-        Client client = new Client(socket, new Random().nextLong(), null);
+        // invalid handshake
+        if (new String(reply).equals(Constants.HANDSHAKE_SERVER))
+            throw new IllegalStateException("Did not receive valid server handshake");
+
+        // receive client id
+        long id = dis.readLong();
+        System.out.println("client's id = " + id);
+
+        // close streams
+        dis.close();
+        os.close();
+
+        Client client = new Client(socket, id , null);
         client.start();
         return client;
     }
