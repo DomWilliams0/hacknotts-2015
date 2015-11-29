@@ -86,8 +86,8 @@ public class Game extends BasicGame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         final int cols = 15;
-        JTextField userName = new JTextField(cols);
-        JTextField host = new JTextField(cols);
+        JTextField userName = new JTextField("Top_Memer",cols);
+        JTextField host = new JTextField("localhost", cols);
 
         panel.add(new JLabel("Username", SwingConstants.CENTER));
         panel.add(userName);
