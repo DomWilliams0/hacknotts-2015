@@ -57,4 +57,13 @@ public enum Direction {
     }
 
 
+    public Direction combine(Direction... direction) {
+        // todo fuck me
+        return this;
+    }
+
+    public Direction toRightAngle() {
+        return Direction.values()[ordinal() + (ordinal() % 2)];
+    }
+
 }

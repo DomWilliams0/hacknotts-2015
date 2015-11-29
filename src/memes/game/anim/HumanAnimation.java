@@ -33,9 +33,9 @@ public class HumanAnimation {
     }
 
     public Animation getAnimation(Direction direction) {
+        direction = direction.toRightAngle();
+
         Animation anim = this.anims.get(direction);
-        if (anim == null)
-            throw new IllegalArgumentException("Direction must be N, E, S or W");
 
         if (playing != wasPlaying) {
             if (playing)

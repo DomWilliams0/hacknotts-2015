@@ -81,6 +81,10 @@ public abstract class BaseEntity implements Serializable {
         // todo update renderer? stop/start animation
     }
 
+    public void changeDirection(Direction direction) {
+        startMoving(direction, currentMoveSpeed);
+    }
+
     public void stopMoving() {
         currentMoveSpeed = 0;
         // todo update renderer?
