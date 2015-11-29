@@ -2,8 +2,6 @@ package memes.game.world;
 
 import memes.game.entity.PlayerEntity;
 import memes.game.render.TileRenderer;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 import java.io.Serializable;
 
@@ -34,10 +32,10 @@ public enum TileType implements Serializable {
     FLOOR(
             // Metadata factory
             TileMetadata.FloorMetadata::new,
-            25, 0
+            24, 0
     ),
     DESK(6, 5),
-    WALL(23, 13),
+    WALL(24, 13),
     COFFEE_MACHINE(
             TileMetadata.CoffeeMachineMetadata::new,
             (tile, player, sabotage) -> {
