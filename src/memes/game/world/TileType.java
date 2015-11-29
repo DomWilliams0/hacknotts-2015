@@ -78,9 +78,12 @@ public enum TileType implements Serializable {
 
                 // programming on own computer
                 if (meta.user.equals(player.getUsername())) {
-                    meta.developmentProgress++;
-                    System.out.printf("%s just programmed on the computer%n", player);
-                    meta.world.update();
+                    if(player.caffeineLevel >= 0) {
+                        meta.developmentProgress += player.relaxationLevel;
+                        player.relaxationLevel--;
+                        System.out.printf("%s just programmed on the computer%n", player);
+                        meta.world.update();
+                    } else System.out.printf("%s tried to program but is too tired!%n", player);
                     return;
                 }
 

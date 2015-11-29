@@ -33,6 +33,7 @@ public class WorldRenderer {
 
         int lastTileY = Math.min((int) (cameraY + Constants.WINDOW_SIZE.getIntY() +
                 (Constants.TILE_SIZE - (cameraY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
+
         ArrayList<Pair<memes.util.Point, String>> computerLabels = new ArrayList<>();
         for (int x = firstTileX; x < lastTileX; x++) {
             // The screen coord that the tile should be rendered too, can be negative
@@ -47,6 +48,7 @@ public class WorldRenderer {
                 else img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
                 tile.type.renderer.render(img, pixelX, pixelY);
 
+                // Add computer user label to render list if necessary
                 if(tile.type == TileType.COMPUTER) {
                     String user = ((TileMetadata.ComputerMetadata)tile.metadata).user;
                     if(user != null) computerLabels.add(new Pair<memes.util.Point, String>(new memes.util.Point(pixelX, pixelY), user));
