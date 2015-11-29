@@ -99,12 +99,6 @@ public class World implements GameObject, Serializable {
     @Override
     public void tick(float delta) {
         entities.forEach(e -> e.tick(delta));
-
-        for (BaseEntity entity : entities) {
-            if (entity instanceof HumanEntity && ((HumanEntity) entity).getUsername().equals("cunt")) {
-                System.out.println("entity = " + entity);
-            }
-        }
     }
 
     @Override
