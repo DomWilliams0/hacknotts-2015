@@ -53,12 +53,10 @@ public class GameClient extends BasicGame implements IEventHandler {
         System.out.println("Game starting");
 
         try {
-            AppGameContainer appGameContainer = new AppGameContainer(this,
+            new AppGameContainer(this,
                     Constants.WINDOW_SIZE.getIntX(),
                     Constants.WINDOW_SIZE.getIntY(),
-                    false);
-            appGameContainer.setTargetFrameRate(15);
-            appGameContainer.start();
+                    false).start();
 
         } catch (SlickException e) {
             System.err.println("Failed to start game: " + e.getMessage());
