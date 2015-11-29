@@ -53,6 +53,7 @@ public class GameServer implements PacketHandler {
     public World getWorld() {
         return world;
     }
+
     public static void main(String[] args) throws Exception {
         INSTANCE = new GameServer();
         INSTANCE.start();

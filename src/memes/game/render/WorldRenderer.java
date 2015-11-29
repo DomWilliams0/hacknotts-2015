@@ -43,7 +43,6 @@ public class WorldRenderer {
             }
         }
 
-        System.out.println("world = " + world.getEntities().size());
         world.getEntities().forEach(e -> e.render(graphics));
     }
 }

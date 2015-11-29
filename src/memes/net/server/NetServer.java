@@ -64,6 +64,8 @@ public class NetServer {
                     continue;
                 }
                 System.out.println("Client " + cs.getID() + " is connected");
+                handlers.forEach(cs::addPacketHandler);
+
                 cs.start();
 
                 clientSockets.add(cs);

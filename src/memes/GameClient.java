@@ -135,12 +135,8 @@ public class GameClient extends BasicGame implements PacketHandler {
             PlayerConnectPacket cp = (PlayerConnectPacket) packet;
 
             // moi
-            if (cp.getID() == client.getID()) {
-                System.out.println("adding myself lel " + client.getName());
-                return;
-            }
+            if (cp.getID() == client.getID()) return;
 
-            System.out.println("joined by " + cp.getUsername());
             PlayerEntity newPlayer = new PlayerEntity(cp.getID(), cp.getUsername(), new Point(64, 64));
             newPlayer.loadAnimation();
             world.addEntity(newPlayer);
