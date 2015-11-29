@@ -1,5 +1,6 @@
 package memes.game.entity;
 
+import memes.game.world.World;
 import memes.util.Constants;
 import memes.util.Direction;
 import memes.util.GameObject;
@@ -32,6 +33,8 @@ public abstract class BaseEntity implements GameObject, Serializable {
     protected int currentMoveSpeed;
     protected Direction movementDirection;
 
+    protected World world;
+
     public BaseEntity(Point position, int moveSpeed, int size) {
         this.aabb = new Rectangle(position.getIntX(), position.getIntY(), size, size);
         this.id = LASTID++;
@@ -41,6 +44,14 @@ public abstract class BaseEntity implements GameObject, Serializable {
         this.currentMoveSpeed = 0;
         this.movementDirection = Direction.SOUTH;
 
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     public long getID() {
