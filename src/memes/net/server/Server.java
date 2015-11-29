@@ -1,7 +1,5 @@
 package memes.net.server;
 
-import memes.game.event.InputEvent;
-import memes.game.input.InputKey;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.util.Constants;
@@ -59,14 +57,17 @@ public class Server {
                     cs.disconnect();
                     continue;
                 }
+                cs.start();
+                cs.addPacketHandler(System.out::println);
 
                 System.out.println("Client " + cs.getID() + " is connected");
 
                 clientSockets.add(cs);
                 clientMap.put(cs.getID(), cs);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("Error");
             }
         }
     }
@@ -99,10 +100,10 @@ public class Server {
             Server server = new Server(System.out::println);
             server.start();
 
-            Client c1 = Client.connectToServer("localhost");
-            c1.addPacketHandler(System.out::println);
+            //Client c1 = Client.connectToServer("localhost");
+            //c1.addPacketHandler(System.out::println);
 
-            server.send(new InputEvent(InputKey.ACTION, true), c1.getID());
+            //server.send(new InputEvent(InputKey.ACTION, true), c1.getID());
 
         } catch (IOException e) {
             e.printStackTrace();

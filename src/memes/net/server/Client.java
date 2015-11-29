@@ -39,7 +39,12 @@ public class Client extends Thread {
                 handlers.forEach(h -> h.onPacketRecieve((Packet) o));
 
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                try {
+                    socket.close();
+                } catch (IOException e1) {
+                    break;
+                }
+                break;
             }
         }
     }
@@ -87,8 +92,8 @@ public class Client extends Thread {
     @Override
     public synchronized void start() {
         try {
-            ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
