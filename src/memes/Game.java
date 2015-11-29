@@ -15,8 +15,6 @@ import org.newdawn.slick.*;
 
 public class Game extends BasicGame {
 
-    public static Game INSTANCE = new Game();
-
     private WorldRenderer worldRenderer;
     private PlayerEntity testPlayer;
 
@@ -84,6 +82,6 @@ public class Game extends BasicGame {
     }
 
     public static void main(String[] args) {
-        INSTANCE = new Game();
+        new Game();
     }
 }
