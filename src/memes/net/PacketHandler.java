@@ -9,5 +9,5 @@ public interface PacketHandler {
      * every time a packet is recieved
      * @param packet packet to process
      */
-    void onPacketRecieve(Packet packet);
+    void onPacketReceive(Packet packet);
 }
