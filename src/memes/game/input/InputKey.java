@@ -23,8 +23,7 @@ public enum InputKey {
         this.control = new KeyControl(key);
         this.direction = direction;
     }
-
-
+    
     InputKey(int key) {
         this(key, null);
     }
