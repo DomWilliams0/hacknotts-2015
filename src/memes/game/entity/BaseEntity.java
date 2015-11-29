@@ -3,6 +3,7 @@ package memes.game.entity;
 import memes.util.Constants;
 import memes.util.Direction;
 import memes.util.Point;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
@@ -44,7 +45,7 @@ public abstract class BaseEntity implements Serializable {
 
     public abstract void tick(float delta);
 
-    public abstract void render();
+    public abstract void render(Graphics graphics);
 
     public long getID() {
         return id;

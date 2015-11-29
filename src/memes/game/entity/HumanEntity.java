@@ -5,8 +5,12 @@ import memes.util.Constants;
 import memes.util.Direction;
 import memes.util.Point;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 public class HumanEntity extends BaseEntity {
+
+    private static final Color NAME_BOX_COLOUR = new Color(0.17f, 0.17f, 0.19f, 0.9f);
 
     private String username;
     private HumanAnimation animation;
@@ -42,9 +46,26 @@ public class HumanEntity extends BaseEntity {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
+        // player
         Animation anim = animation.getAnimation(movementDirection);
         anim.draw((float) position.getX(), (float) position.getY());
+
+        // name
+        int width = graphics.getFont().getWidth(username);
+        int height = graphics.getFont().getHeight(username);
+        final int paddingH = 6;
+        final int paddingV = 3;
+
+        float nameX = (float) position.getX() - width / 2 + aabb.getWidth();
+        float nameY = (float) position.getY() - height / 2 - aabb.getHeight() + paddingV;
+
+        graphics.setColor(this.NAME_BOX_COLOUR);
+        graphics.fillRect(nameX - paddingH / 2, nameY - paddingV / 2, width + paddingH, height + paddingV);
+
+        graphics.setColor(Color.white);
+        graphics.drawString(username, nameX, nameY);
+
     }
 
     public String getUsername() {
