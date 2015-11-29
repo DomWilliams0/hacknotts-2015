@@ -21,7 +21,7 @@ public class WorldRenderer implements Renderer {
         for(int x = tileX; x < tileX + numTilesX; x++) {
             for(int y = tileY; y < tileY + numTilesY; y++) {
                 Tile tile = world.getTile(tileX + x, tileY + y).get();
-                tile.type.render(tile.metadata, (float)cameraX + (x * Constants.TILE_SIZE) + scaleX * (x - tileX), (float)cameraY + (y * Constants.TILE_SIZE) + scaleY * (y - tileY), scaleX, scaleY);
+                tile.type.render(tile.metadata, (float)cameraX + scaleX * (x - tileX), (float)cameraY + scaleY * (y - tileY), scaleX, scaleY);
             }
         }
     }

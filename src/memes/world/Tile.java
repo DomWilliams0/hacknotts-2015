@@ -1,8 +1,6 @@
 package memes.world;
 
-import memes.render.TileRenderer;
 import memes.util.Constants;
-import org.lwjgl.LWJGLException;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
