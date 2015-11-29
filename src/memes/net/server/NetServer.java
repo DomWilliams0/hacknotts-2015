@@ -20,13 +20,13 @@ public class NetServer {
     private Queue<Packet> sendQueue, recvQueue;
 
     private Thread listenThread;
-    private PacketHandler handler;
+    protected List<PacketHandler> handlers;
 
     private boolean isRunning;
 
-    public NetServer(PacketHandler handler) throws IOException {
-        this.handler = handler;
+    public NetServer() throws IOException {
         this.isRunning = true;
+        this.handlers = new ArrayList<>();
         this.listenThread = new Thread(this::listen, "ServerThread");
 
         servSocket = new ServerSocket(Constants.PORT_NUM);
@@ -39,6 +39,13 @@ public class NetServer {
 
     public void start() {
         listenThread.start();
+    }
+    public void stop() {
+        isRunning = false;
+    }
+
+    public void addPacketHandler(PacketHandler handler) {
+        handlers.add(handler);
     }
 
     private void listen() {
@@ -70,6 +77,12 @@ public class NetServer {
                 System.out.println("Error");
             }
         }
+        try {
+            servSocket.close();
+            clientSockets.forEach(NetClient::disconnect);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void send(Packet packet) throws IOException {
@@ -93,20 +106,5 @@ public class NetServer {
     private void sendAll(Packet packet) {
         // TODO: Send packet to all
         throw new NotImplementedException();
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        try {
-            NetServer server = new NetServer(System.out::println);
-            server.start();
-
-            //Client c1 = Client.connectToServer("localhost");
-            //c1.addPacketHandler(System.out::println);
-
-            //server.send(new InputEvent(InputKey.ACTION, true), c1.getID());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

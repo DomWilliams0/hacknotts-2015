@@ -139,8 +139,11 @@ public class NetClient extends Thread {
         // TODO: Send message packets to client
         throw new NotImplementedException();
     }
-    public void disconnect() throws IOException {
-        socket.close();
+    public void disconnect() {
+        try {
+            socket.close();
+        } catch (IOException e) { }
+        // It really doesn't matter at this point
     }
 
     public long getID() {
