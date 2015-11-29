@@ -21,7 +21,13 @@ public enum TileType {
                 meta.developmentProgress++;
                 System.out.printf("%s dev for tile is now %d%n", player.toString(), meta.developmentProgress);
             }
-    );
+    );/*,
+    COFFEE_MACHINE(
+            TileMetadata.CoffeeMachineMetadata::new,
+            (tile, player) -> {
+                return System.out.println(player + " just used a coffee machine");
+            }
+    );*/
 
     // This defines how the tile type's metadata is constructed
     public TileMetadata.MetadataFactory factory;

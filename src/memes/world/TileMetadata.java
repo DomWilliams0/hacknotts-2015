@@ -34,4 +34,8 @@ public abstract class TileMetadata {
 
     }
 
+    public static class CoffeeMachineMetadata extends TileMetadata {
+
+    }
+
 }
