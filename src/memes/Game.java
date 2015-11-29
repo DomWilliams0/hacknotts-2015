@@ -47,7 +47,7 @@ public class Game extends BasicGame {
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-        if (r != null) r.render(0, 0);
+        if (r != null) r.render(19, 0);
         else System.out.println("oops m8");
     }
 }
