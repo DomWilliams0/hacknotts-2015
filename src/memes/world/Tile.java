@@ -10,18 +10,18 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Tile {
 
-    public TileType type;
-    public TileMetadata metadata;
-
     public static SpriteSheet sprites = null;
 
     static {
         try {
-            sprites = new SpriteSheet(new Image("res/terrain/interior.png"), Constants.TILE_SIZE, Constants.TILE_SIZE, 1, 0);
+            sprites = new SpriteSheet(new Image("res/terrain/interior_transparent.png"), Constants.TILE_SIZE, Constants.TILE_SIZE, 1, 0);
         } catch(SlickException e) {
             e.printStackTrace();
         }
     }
+
+    public TileType type;
+    public TileMetadata metadata;
 
     public Tile(TileType type) {
         this.type = type;

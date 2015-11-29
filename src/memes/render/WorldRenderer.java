@@ -1,6 +1,6 @@
 package memes.render;
 
-import jdk.nashorn.internal.runtime.regexp.joni.ast.ConsAltNode;
+import memes.Game;
 import memes.util.Constants;
 import memes.world.Tile;
 import memes.world.World;
@@ -15,13 +15,18 @@ public class WorldRenderer implements Renderer {
 
     @Override
     public void render(double cameraX, double cameraY) {
-        int tileX = (int)cameraX / Constants.TILE_SIZE, tileY = (int)cameraY / Constants.TILE_SIZE;
-        int numTilesX = Math.min(world.getXSize(), 1280 / Constants.TILE_SIZE), numTilesY = Math.min(world.getYSize(), 720 / Constants.TILE_SIZE);
-        float scaleX = Constants.TILE_SIZE * ((1280 / Constants.TILE_SIZE) / numTilesX), scaleY = Constants.TILE_SIZE * ((720 / Constants.TILE_SIZE) / numTilesY);
-        for(int x = tileX; x < tileX + numTilesX; x++) {
-            for(int y = tileY; y < tileY + numTilesY; y++) {
-                Tile tile = world.getTile(tileX + x, tileY + y).get();
-                tile.type.render(tile.metadata, (float)cameraX + scaleX * (x - tileX), (float)cameraY + scaleY * (y - tileY), scaleX, scaleY);
+        double xOfScreen = cameraX % Constants.TILE_SIZE;
+        double yOfScreen = cameraY % Constants.TILE_SIZE;
+        int firstTileX = (int) (cameraX - xOfScreen) / Constants.TILE_SIZE;
+        int firstTileY = (int) (cameraY - (cameraY % Constants.TILE_SIZE)) / Constants.TILE_SIZE;
+        int lastTileX = Math.min((int) (cameraX + Game.WIDTH + (Constants.TILE_SIZE - (cameraX % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getXSize());
+        int lastTileY = Math.min((int) (cameraY + Game.HEIGHT + (Constants.TILE_SIZE - (cameraY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
+        for (int x = firstTileX; x < lastTileX; x++) {
+            float pixelX = (float) ((cameraX + (x - firstTileX) * Constants.TILE_SIZE) - xOfScreen);
+            for (int y = firstTileY; y < lastTileY; y++) {
+                float pixelY = (float) ((cameraY + (y - firstTileY) * Constants.TILE_SIZE) - yOfScreen);
+                Tile tile = world.getTile(x, y).get();
+                tile.type.render(tile.metadata, pixelX, pixelY);
             }
         }
     }

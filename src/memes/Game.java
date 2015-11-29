@@ -7,17 +7,23 @@ import org.newdawn.slick.*;
 
 public class Game extends BasicGame {
 
+    public static final Game INSTANCE = new Game();
+    public static final int WIDTH = 1280, HEIGHT = 720;
+    WorldRenderer r = null;
+
     public Game() {
         super("Pokememe");
     }
 
-    WorldRenderer r = null;
+    public static void main(String[] args) {
+        INSTANCE.start();
+    }
 
     public void start() {
         System.out.println("Game starting");
 
         try {
-            AppGameContainer container = new AppGameContainer(this, 1280, 720, false);
+            AppGameContainer container = new AppGameContainer(this, WIDTH, HEIGHT, false);
             container.start();
         } catch (SlickException e) {
             System.err.println("Failed to start game: " + e.getMessage());
@@ -43,9 +49,5 @@ public class Game extends BasicGame {
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         if (r != null) r.render(0, 0);
         else System.out.println("oops m8");
-    }
-
-    public static void main(String[] args) {
-        new Game().start();
     }
 }

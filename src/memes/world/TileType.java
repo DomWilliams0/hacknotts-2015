@@ -1,10 +1,7 @@
 package memes.world;
 
 import memes.render.TileRenderer;
-import memes.util.Constants;
-import org.lwjgl.LWJGLException;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SpriteSheet;
 
 public enum TileType {
     FLOOR((x, y, world) -> new TileMetadata.FloorMetadata(x, y, world), 25, 0),
@@ -31,7 +28,7 @@ public enum TileType {
         this(null, spriteX, spriteY);
     }
 
-    public void render(TileMetadata meta, float x, float y, float width, float height) {
-        renderer.render(img, x, y, width, height);
+    public void render(TileMetadata meta, float x, float y) {
+        renderer.render(img, x, y);
     }
 }
