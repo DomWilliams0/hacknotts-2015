@@ -36,7 +36,7 @@ public class NetClient extends Thread {
                 if (!(o instanceof Packet))
                     throw new UnsupportedOperationException("Received object is not a Packet. Uh wat");
 
-                handlers.forEach(h -> h.onPacketRecieve((Packet) o));
+                handlers.forEach(h -> h.onPacketReceive((Packet) o));
 
             } catch (IOException | ClassNotFoundException e) {
                 try {
