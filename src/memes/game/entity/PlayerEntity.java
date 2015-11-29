@@ -17,7 +17,7 @@ public class PlayerEntity extends HumanEntity implements IEventHandler {
     public PlayerEntity(Point position, String username) {
         super(position, username);
         movementHandlers = new EventHandler<>();
-        currentDirections = new BitSet(InputKey.values().length);
+        currentDirections = new BitSet(InputKey.DIRECTIONALS.length);
     }
 
     public void addHandler(IEventHandler handler) {

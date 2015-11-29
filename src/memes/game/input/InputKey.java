@@ -9,8 +9,11 @@ public enum InputKey {
     LEFT(Input.KEY_A, Direction.WEST),
     RIGHT(Input.KEY_D, Direction.EAST),
     DOWN(Input.KEY_S, Direction.SOUTH),
+
     ACTION(Input.KEY_SPACE),
     EXIT(Input.KEY_ESCAPE);
+
+    public static final InputKey[] DIRECTIONALS = {UP, LEFT, RIGHT, DOWN};
 
     private KeyControl control;
     private Direction direction;
