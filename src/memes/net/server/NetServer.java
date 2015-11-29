@@ -3,7 +3,6 @@ package memes.net.server;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.util.Constants;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -101,8 +100,9 @@ public class NetServer {
         oos.writeObject(packet);
     }
 
-    private void sendAll(Packet packet) {
-        // TODO: Send packet to all
-        throw new NotImplementedException();
+    private void sendAll(Packet packet) throws IOException {
+
+        for (NetClient socket : clientSockets)
+            socket.sendPacket(packet);
     }
 }

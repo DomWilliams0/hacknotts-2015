@@ -48,7 +48,7 @@ public class NetClient extends Thread {
                 if (isServer) {
                     if (packet instanceof PlayerConnectPacket) {
                         PlayerConnectPacket connPacket = (PlayerConnectPacket) packet;
-                        System.out.println("connPacket received = " + connPacket);
+                        System.out.println("[server] connPacket received = " + connPacket);
 
                         World world = GameServer.INSTANCE.getWorld();
                         PlayerEntity player = new PlayerEntity(
@@ -66,10 +66,9 @@ public class NetClient extends Thread {
                         }
                     }
 
-
-                } else {
-                    handlers.forEach(h -> h.onPacketReceive(packet));
                 }
+
+                handlers.forEach(h -> h.onPacketReceive(packet));
 
             } catch (IOException | ClassNotFoundException e) {
                 try {
@@ -147,6 +146,7 @@ public class NetClient extends Thread {
 
         super.start();
     }
+
     /**
      * Called by Server to handshake with a client
      *
@@ -179,13 +179,16 @@ public class NetClient extends Thread {
         // TODO: Implement ping-pong pattern
         throw new NotImplementedException();
     }
-    public void sendPacket(Packet packet) throws Exception {
+
+    public void sendPacket(Packet packet) throws IOException {
         oos.writeObject(packet);
     }
+
     public void sendText(String s) {
         // TODO: Send message packets to client
         throw new NotImplementedException();
     }
+
     public void disconnect() {
         try {
             socket.close();
@@ -197,6 +200,7 @@ public class NetClient extends Thread {
     public long getID() {
         return clientID;
     }
+
     public Socket getSocket() {
         return socket;
     }

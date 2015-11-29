@@ -1,5 +1,6 @@
 package memes;
 
+import memes.game.entity.HumanEntity;
 import memes.game.render.anim.Animations;
 import memes.game.entity.PlayerEntity;
 import memes.game.event.ActionHandler;
@@ -12,12 +13,16 @@ import memes.game.world.World;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
+import memes.net.packet.PlayerConnectPacket;
 import memes.net.packet.WorldPacket;
+import memes.net.server.GameServer;
 import memes.net.server.NetClient;
 import memes.util.Constants;
+import memes.util.Point;
 import org.newdawn.slick.*;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class GameClient extends BasicGame implements PacketHandler {
 
@@ -63,12 +68,25 @@ public class GameClient extends BasicGame implements PacketHandler {
         String serverHost = guiSelection[1]; // todo inetaddress
 
         // a bit of validation
-        if (username.isEmpty() || serverHost.isEmpty())
-            throw new IllegalArgumentException("Enter all fields you fool!");
+        if (username.isEmpty())
+            throw new IllegalArgumentException("Enter a name you fool!");
 
         // load resources
         Animations.loadAll();
         TextureManager.init();
+
+        // start server
+        if (serverHost.isEmpty()) {
+            try {
+                GameServer.INSTANCE = new GameServer();
+                GameServer.INSTANCE.start();
+                serverHost = "localhost";
+            } catch (IOException e) {
+                System.err.println("Could not host server");
+                e.printStackTrace();
+                System.exit(2);
+            }
+        }
 
         try {
             client = NetClient.connectToServer(serverHost);
@@ -97,6 +115,11 @@ public class GameClient extends BasicGame implements PacketHandler {
             System.out.println("Received world packet");
 
             world = ((WorldPacket) packet).getWorld();
+            world.getEntities().forEach(e -> {
+                if (e instanceof HumanEntity)
+                    ((HumanEntity) e).loadAnimation();
+            });
+
 
             player = (PlayerEntity) world.getEntityFromID(client.getID());
             player.loadAnimation();
@@ -105,6 +128,23 @@ public class GameClient extends BasicGame implements PacketHandler {
 
             input.addHandler(player);
             input.addHandler(new ActionHandler(player));
+        }
+
+        // a player joined
+        else if (packet.getPacketType() == PacketType.Connect) {
+            PlayerConnectPacket cp = (PlayerConnectPacket) packet;
+
+            // moi
+            if (cp.getID() == client.getID()) {
+                System.out.println("adding myself lel " + client.getName());
+                return;
+            }
+
+            System.out.println("joined by " + cp.getUsername());
+            PlayerEntity newPlayer = new PlayerEntity(cp.getID(), cp.getUsername(), new Point(64, 64));
+            newPlayer.loadAnimation();
+            world.addEntity(newPlayer);
+
         }
     }
 

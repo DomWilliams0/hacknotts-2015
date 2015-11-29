@@ -6,6 +6,8 @@ import memes.game.world.World;
 import memes.game.world.gen.FileOfficeGenerator;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
+import memes.net.packet.PacketType;
+import memes.net.packet.PlayerConnectPacket;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +39,15 @@ public class GameServer implements PacketHandler {
 
     @Override
     public void onPacketReceive(Packet packet) {
-        System.out.println("packet = " + packet);
+        // new player joins
+        if (packet.getPacketType() == PacketType.Connect) {
+            PlayerConnectPacket cp = (PlayerConnectPacket) packet;
+            try {
+                netServer.send(cp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public World getWorld() {
