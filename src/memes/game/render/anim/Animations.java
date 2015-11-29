@@ -1,4 +1,4 @@
-package memes.game.anim;
+package memes.game.render.anim;
 
 import memes.util.Constants;
 import org.newdawn.slick.Animation;

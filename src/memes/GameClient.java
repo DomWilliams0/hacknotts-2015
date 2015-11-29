@@ -1,6 +1,6 @@
 package memes;
 
-import memes.game.anim.Animations;
+import memes.game.render.anim.Animations;
 import memes.game.entity.PlayerEntity;
 import memes.game.event.ActionHandler;
 import memes.game.event.InputEvent;

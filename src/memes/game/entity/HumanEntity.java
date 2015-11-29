@@ -1,6 +1,6 @@
 package memes.game.entity;
 
-import memes.game.anim.HumanAnimation;
+import memes.game.render.anim.HumanAnimation;
 import memes.util.Constants;
 import memes.util.Direction;
 import memes.util.Point;
