@@ -14,7 +14,8 @@ public class EventHandler<E extends Packet> {
     }
 
     public void addHandler(IEventHandler<E> handler) {
-        handlers.add(handler);
+        if (handler != null)
+            handlers.add(handler);
     }
 
     public void callHandlers(E event) {

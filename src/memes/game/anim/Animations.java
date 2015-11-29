@@ -84,6 +84,7 @@ public class Animations {
             anims[i] = new Animation(sheet, 0, i,
                     sheet.getHorizontalCount() - 1,
                     i, true, duration, true);
+            anims[i].stop();
         }
 
         return anims;
