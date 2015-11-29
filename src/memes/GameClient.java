@@ -35,7 +35,6 @@ public class GameClient extends BasicGame implements IEventHandler {
     private NetClient client;
     public PlayerEntity player;
     private InputHandler input;
-    private GameContainer gameContainer;
 
     private World world;
     private WorldRenderer worldRenderer;
@@ -66,7 +65,6 @@ public class GameClient extends BasicGame implements IEventHandler {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
-        this.gameContainer = gameContainer;
         gameContainer.setAlwaysRender(true);
 
         // ask for host and username
@@ -87,11 +85,6 @@ public class GameClient extends BasicGame implements IEventHandler {
             try {
                 GameServer.INSTANCE = new GameServer();
                 serverHost = "localhost";
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 GameServer.INSTANCE.start();
             } catch (IOException e) {
                 System.err.println("Could not host server");
