@@ -27,7 +27,7 @@ public abstract class TileMetadata {
 
         public int developmentProgress = 0;
         public String user;
-        public static final int threshold = 10;
+        public static final int THRESHOLD = 10;
 
         public ComputerMetadata(int x, int y, World world) {
 
