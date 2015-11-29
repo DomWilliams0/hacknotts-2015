@@ -51,6 +51,7 @@ public class World implements GameObject {
      */
     public void addEntity(BaseEntity e) {
         entities.add(e);
+        e.setWorld(this);
     }
 
     public int getXSize() {
