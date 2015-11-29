@@ -111,8 +111,7 @@ public enum TileType {
             case 'd':
                 return TileType.DESK;
             default:
-                System.err.printf("Unrecognised tile character: %c", ch);
-                return null;
+                throw new IllegalArgumentException("Invalid tile char: " + ch);
         }
     }
 
