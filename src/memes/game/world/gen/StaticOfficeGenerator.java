@@ -45,6 +45,8 @@ public class StaticOfficeGenerator implements Generator {
                 return TileType.WALL;
             case 'c':
                 return TileType.COMPUTER;
+            case 'm':
+                return TileType.COFFEE_MACHINE;
             default:
                 System.err.println("Unrecognised tile character: " + ch);
                 return null;

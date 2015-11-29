@@ -12,6 +12,10 @@ public enum TileType {
     ),
     DESK(6, 5),
     WALL(23, 13),
+    COFFEE_MACHINE(
+            TileMetadata.CoffeeMachineMetadata::new,
+            (tile, player) -> System.out.printf("%s just used a coffee machine%n", player)
+    ),
     COMPUTER(
             // Metadata factory
             TileMetadata.ComputerMetadata::new,
@@ -21,13 +25,7 @@ public enum TileType {
                 meta.developmentProgress++;
                 System.out.printf("%s dev for tile is now %d%n", player.toString(), meta.developmentProgress);
             }
-    );/*,
-    COFFEE_MACHINE(
-            TileMetadata.CoffeeMachineMetadata::new,
-            (tile, player) -> {
-                return System.out.println(player + " just used a coffee machine");
-            }
-    );*/
+    );
 
     // This defines how the tile type's metadata is constructed
     public TileMetadata.MetadataFactory factory;
