@@ -5,18 +5,16 @@ import memes.game.entity.PlayerEntity;
 import memes.game.event.InputEvent;
 import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
-import memes.gen.StaticOfficeGenerator;
+import memes.game.world.World;
+import memes.game.world.gen.StaticOfficeGenerator;
 import memes.net.packet.PacketType;
-import memes.render.WorldRenderer;
 import memes.util.Constants;
 import memes.util.Point;
-import memes.world.World;
 import org.newdawn.slick.*;
 
 public class Game extends BasicGame {
 
-    private WorldRenderer worldRenderer;
-    private PlayerEntity testPlayer;
+    private World world;
 
     public Game() {
         // ALERT! Do not do any game initialisation in here, use init(GameContainer) instead (so that OpenGL is already initialised etc.)
@@ -42,11 +40,11 @@ public class Game extends BasicGame {
         Animations.loadAll();
 
         // init world
-        World world = (new StaticOfficeGenerator()).genWorld(19, 5);
-        worldRenderer = new WorldRenderer(world);
+        world = (new StaticOfficeGenerator()).genWorld(19, 5);
 
         // init player
-        testPlayer = new PlayerEntity(new Point(640, 640), "Top_Memer");
+        PlayerEntity testPlayer = new PlayerEntity(new Point(640, 640), "Top_Memer");
+        world.addEntity(testPlayer);
 
         // input
         InputHandler input = new InputHandler(gameContainer);
@@ -66,19 +64,13 @@ public class Game extends BasicGame {
     public void update(GameContainer gameContainer, int i) throws SlickException {
 
         float delta = (float) i / 1000;
-
-        // todo tick world
-
-        testPlayer.tick(delta);
+        world.tick(delta);
     }
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         // render world
-        worldRenderer.render(0, 0);
-
-        // render player
-        testPlayer.render(graphics);
+        world.render(graphics);
     }
 
     public static void main(String[] args) {

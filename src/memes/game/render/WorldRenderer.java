@@ -1,8 +1,8 @@
-package memes.render;
+package memes.game.render;
 
 import memes.util.Constants;
-import memes.world.Tile;
-import memes.world.World;
+import memes.game.world.Tile;
+import memes.game.world.World;
 
 public class WorldRenderer implements Renderer {
 

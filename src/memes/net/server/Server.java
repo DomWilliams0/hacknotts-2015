@@ -1,13 +1,8 @@
 package memes.net.server;
 
-import memes.game.entity.PlayerEntity;
-import memes.game.event.InputEvent;
-import memes.game.input.InputKey;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.util.Constants;
-import memes.world.Tile;
-import memes.world.TileType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;

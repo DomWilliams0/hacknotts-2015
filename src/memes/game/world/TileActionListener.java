@@ -1,4 +1,4 @@
-package memes.world;
+package memes.game.world;
 
 import memes.game.entity.PlayerEntity;
 
