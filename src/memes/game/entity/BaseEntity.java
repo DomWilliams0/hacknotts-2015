@@ -67,17 +67,22 @@ public abstract class BaseEntity implements Serializable {
     }
 
     public boolean isMoving() {
-        return moveSpeed != 0;
+        return currentMoveSpeed != 0;
     }
 
-    public void startMoving() {
-        currentMoveSpeed = moveSpeed;
-        // todo update renderer
+    public void startMoving(Direction direction) {
+        startMoving(direction, moveSpeed);
+    }
+
+    public void startMoving(Direction direction, int speed) {
+        currentMoveSpeed = speed;
+        movementDirection = direction;
+        // todo update renderer? stop/start animation
     }
 
     public void stopMoving() {
         currentMoveSpeed = 0;
-        // todo update renderer
+        // todo update renderer?
     }
 
     @Override

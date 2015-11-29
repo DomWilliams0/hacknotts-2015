@@ -43,4 +43,16 @@ public class MoveEvent implements Packet, Serializable {
     public PacketType getPacketType() {
         return isMoveStart ? PacketType.StartMove : PacketType.EndMove;
     }
+
+    @Override
+    public String toString() {
+        return "MoveEvent{" +
+                "entityID=" + entityID +
+                ", x=" + x +
+                ", y=" + y +
+                ", speed=" + speed +
+                ", direction=" + direction +
+                ", isMoveStart=" + isMoveStart +
+                '}';
+    }
 }
