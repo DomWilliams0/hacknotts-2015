@@ -57,8 +57,8 @@ public class HumanEntity extends BaseEntity {
         final int paddingH = 6;
         final int paddingV = 3;
 
-        float nameX = (float) position.getX() - width / 2 + aabb.getWidth();
-        float nameY = (float) position.getY() - height / 2 - aabb.getHeight() + paddingV;
+        float nameX = (float) position.getX() - width / 2 + aabb.getWidth() / 2;
+        float nameY = (float) position.getY() - height / 2 - aabb.getHeight() * 0.4f;
 
         graphics.setColor(NAME_BOX_COLOUR);
         graphics.fillRect(nameX - paddingH / 2, nameY - paddingV / 2, width + paddingH, height + paddingV);
