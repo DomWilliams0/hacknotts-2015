@@ -85,11 +85,13 @@ public enum TileType implements Serializable {
     public TileMetadata.MetadataFactory factory;
     public TileRenderer renderer;
     public TileActionListener onAction;
-    //private Image img;
+    public int spriteX, spriteY;
+    public String name = name().toLowerCase();
 
     TileType(TileMetadata.MetadataFactory factory, TileRenderer renderer, TileActionListener onAction, int spriteX, int spriteY) {
         this.factory = factory;
-        //this.img = Tile.sprites.getSprite(spriteX, spriteY);
+        this.spriteX = spriteX;
+        this.spriteY = spriteY;
         this.renderer = renderer;
         this.onAction = onAction;
     }
@@ -99,7 +101,7 @@ public enum TileType implements Serializable {
     }
 
     TileType(TileMetadata.MetadataFactory factory, TileActionListener onAction) {
-        this(factory, TileRenderer.standardRenderer, onAction, 0, 0);
+        this(factory, TileRenderer.standardRenderer, onAction, -1, -1);
 
 
         //img = new Image("res/terrain/" + this.name().toLowerCase() + ".png");

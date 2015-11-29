@@ -12,17 +12,6 @@ import java.io.Serializable;
  */
 public class Tile implements Serializable {
 
-    public static SpriteSheet sprites = null;
-
-    /*static {
-        try {
-            sprites = new SpriteSheet(new Image("res/terrain/interior_transparent.png"),
-                    Constants.TILE_LOAD_SIZE, Constants.TILE_LOAD_SIZE, 1, 0);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public TileType type;
     public TileMetadata metadata;
 

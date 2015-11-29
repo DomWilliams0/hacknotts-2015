@@ -3,6 +3,7 @@ package memes.game.render;
 import memes.util.Constants;
 import memes.game.world.Tile;
 import memes.game.world.World;
+import org.newdawn.slick.Image;
 
 public class WorldRenderer implements Renderer {
 
@@ -35,7 +36,10 @@ public class WorldRenderer implements Renderer {
                 float pixelY = (float) ((cameraY + ((y - firstTileY) * Constants.TILE_SIZE)) - yOffScreen);
 
                 Tile tile = world.getTile(x, y).get();
-                tile.type.render(tile.metadata, pixelX, pixelY);
+                Image img = null;
+                if(tile.type.spriteX < 0 || tile.type.spriteY < 0) img = TextureManager.imageMap.get(tile.type.name);
+                else img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
+                tile.type.renderer.render(img, pixelX, pixelY);
             }
         }
     }
