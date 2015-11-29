@@ -22,7 +22,7 @@ public class InputHandler implements InputProviderListener {
             provider.bindCommand(key.getControl(), new MemeCommand(key));
     }
 
-    public void addHandler(IEventHandler<InputEvent> handler) {
+    public void addHandler(IEventHandler handler) {
         eventHandler.addHandler(handler);
     }
 

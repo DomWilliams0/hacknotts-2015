@@ -14,7 +14,6 @@ public class HumanAnimation {
     private static final int TEMP_ANIM_STEP = 140;
 
     private Map<Direction, Animation> anims;
-
     private boolean playing, wasPlaying;
 
     public HumanAnimation(String animationNickname) {
@@ -34,17 +33,14 @@ public class HumanAnimation {
 
     public Animation getAnimation(Direction direction) {
         direction = direction.toRightAngle();
-
         Animation anim = this.anims.get(direction);
 
         if (playing != wasPlaying) {
-            if (playing)
-                anim.start();
-            else anim.stop();
-
+            anims.values().stream().forEach(playing ? Animation::start : Animation::stop);
             anim.setCurrentFrame(0);
-            wasPlaying = playing;
         }
+
+        wasPlaying = playing;
 
         return anim;
     }

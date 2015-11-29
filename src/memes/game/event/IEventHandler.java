@@ -2,8 +2,8 @@ package memes.game.event;
 
 import memes.net.packet.Packet;
 
-public interface IEventHandler<E extends Packet> {
+public interface IEventHandler {
 
-    void onEvent(E event);
+    void onEvent(Packet event);
 
 }
