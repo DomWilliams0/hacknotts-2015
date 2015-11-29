@@ -1,12 +1,15 @@
 package memes.game.render;
 
 import javafx.util.Pair;
+import memes.GameClient;
+import memes.game.entity.PlayerEntity;
 import memes.game.world.Tile;
 import memes.game.world.TileMetadata;
 import memes.game.world.TileType;
 import memes.game.world.World;
 import memes.util.Constants;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -69,5 +72,26 @@ public class WorldRenderer {
         });
 
         world.getEntities().forEach(e -> e.render(graphics));
+
+        PlayerEntity player = GameClient.INSTANCE.player;
+
+        // draw caffeine bar
+        player.caffeineLevel = PlayerEntity.MAX_CAFFEINE / 2;
+        graphics.setColor(Color.white);
+        graphics.drawString("Caffeine", 0, 30);
+        graphics.setColor(Color.black);
+        graphics.fillRect(10, 60, 40, PlayerEntity.MAX_CAFFEINE * 3);
+        graphics.setColor(Color.green);
+        graphics.fillRect(10, PlayerEntity.MAX_CAFFEINE * 3 - player.caffeineLevel * 3 + 60, 40, player.caffeineLevel * 3);
+
+        // draw relaxation bar
+        player.relaxationLevel = PlayerEntity.MAX_RELAXATION / 2;
+        graphics.setColor(Color.white);
+        graphics.drawString("Relaxation", 75, 30);
+        graphics.setColor(Color.black);
+        graphics.fillRect(85, 60, 40, PlayerEntity.MAX_RELAXATION * 3);
+        graphics.setColor(Color.blue);
+        graphics.fillRect(85, PlayerEntity.MAX_RELAXATION * 3 - player.relaxationLevel * 3 + 60, 40, player.relaxationLevel * 3);
+
     }
 }

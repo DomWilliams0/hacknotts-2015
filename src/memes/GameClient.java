@@ -29,7 +29,7 @@ public class GameClient extends BasicGame implements PacketHandler {
     public static GameClient INSTANCE;
 
     private NetClient client;
-    private PlayerEntity player;
+    public PlayerEntity player;
     private InputHandler input;
     private GameContainer gameContainer;
 

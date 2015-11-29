@@ -45,7 +45,7 @@ public enum TileType implements Serializable {
                 if (sabotage) {
                     if (!meta.sabotaged) {
                         meta.sabotaged = true;
-                        System.out.printf("%s just sabotaged the coffee machine%n", player);
+                        System.out.printf("%s just sabotaged a coffee machine%n", player);
                         meta.world.update();
                     }
                 } else if (player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
@@ -71,7 +71,7 @@ public enum TileType implements Serializable {
                 if (meta.user == null) {
                     meta.user = player.getUsername();
                     player.computer = meta;
-                    System.out.printf("%s is now bound to the computer%n", player);
+                    System.out.printf("%s is now bound to a computer%n", player);
                     meta.world.update();
                     return;
                 }
@@ -81,7 +81,7 @@ public enum TileType implements Serializable {
                     if(player.caffeineLevel >= 0) {
                         meta.developmentProgress += player.relaxationLevel;
                         player.relaxationLevel--;
-                        System.out.printf("%s just programmed on the computer%n", player);
+                        System.out.printf("%s just programmed on a computer%n", player);
                         meta.world.update();
                     } else System.out.printf("%s tried to program but is too tired!%n", player);
                     return;
@@ -90,7 +90,7 @@ public enum TileType implements Serializable {
                 // sabotaging
                 if (sabotage) {
                     meta.developmentProgress--;
-                    System.out.printf("%s just sabotaged the computer%n", player);
+                    System.out.printf("%s just sabotaged a computer%n", player);
                     meta.world.update();
                     return;
                 }
@@ -102,7 +102,6 @@ public enum TileType implements Serializable {
                     meta.world.update();
                     return;
                 }
-
                 System.out.printf("%s is trying to steal code but they haven't been assigned a computer yet%n", player);
             }
     );
