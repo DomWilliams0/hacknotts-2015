@@ -93,5 +93,8 @@ public class WorldRenderer {
         graphics.setColor(Color.blue);
         graphics.fillRect(85, PlayerEntity.MAX_RELAXATION * 3 - player.relaxationLevel * 3 + 60, 40, player.relaxationLevel * 3);
 
+        graphics.setColor(Color.white);
+        graphics.drawString("Score: 1010101", 10, 100);
+
     }
 }
