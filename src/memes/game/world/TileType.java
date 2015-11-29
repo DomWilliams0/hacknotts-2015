@@ -98,4 +98,22 @@ public enum TileType {
         renderer.render(img, x, y);
     }
 
+    public static TileType getFromChar(char ch) {
+        switch (ch) {
+            case 'w':
+                return TileType.WALL;
+            case 'f':
+                return TileType.FLOOR;
+            case 'c':
+                return TileType.COMPUTER;
+            case 'm':
+                return TileType.COFFEE_MACHINE;
+            case 'd':
+                return TileType.DESK;
+            default:
+                System.err.printf("Unrecognised tile character: %c", ch);
+                return null;
+        }
+    }
+
 }
