@@ -1,8 +1,8 @@
 package memes.util;
 
-import org.omg.CORBA.portable.IndirectionException;
+import java.io.Serializable;
 
-public class Point {
+public class Point implements Serializable {
 
     public static final Point EMPTY = new Point(0, 0);
 

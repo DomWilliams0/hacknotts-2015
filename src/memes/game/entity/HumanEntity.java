@@ -8,7 +8,9 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-public class HumanEntity extends BaseEntity {
+import java.io.Serializable;
+
+public class HumanEntity extends BaseEntity implements Serializable {
 
     private static final Color NAME_BOX_COLOUR = new Color(0.17f, 0.17f, 0.19f, 0.9f);
 
@@ -18,6 +20,9 @@ public class HumanEntity extends BaseEntity {
     public HumanEntity(long entityID, Point position, String username) {
         super(entityID, position, Constants.TILE_SIZE * 4, Constants.TILE_SIZE);
         this.username = username;
+    }
+
+    public void loadAnimation() {
         this.animation = new HumanAnimation("business_man");
     }
 

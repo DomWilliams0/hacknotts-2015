@@ -1,11 +1,12 @@
 package memes.game.render;
 
-import memes.util.Constants;
 import memes.game.world.Tile;
 import memes.game.world.World;
+import memes.util.Constants;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-public class WorldRenderer implements Renderer {
+public class WorldRenderer {
 
     private World world;
 
@@ -13,8 +14,7 @@ public class WorldRenderer implements Renderer {
         this.world = world;
     }
 
-    @Override
-    public void render(double cameraX, double cameraY) {
+    public void render(Graphics graphics, double cameraX, double cameraY) {
         // These represent by how many pixels the tiles should be rendered off the screen
         double xOffScreen = cameraX % Constants.TILE_SIZE;
         double yOffScreen = cameraY % Constants.TILE_SIZE;
@@ -42,5 +42,7 @@ public class WorldRenderer implements Renderer {
                 tile.type.renderer.render(img, pixelX, pixelY);
             }
         }
+
+        world.getEntities().forEach(e -> e.render(graphics));
     }
 }

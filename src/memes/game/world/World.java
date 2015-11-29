@@ -1,7 +1,6 @@
 package memes.game.world;
 
 import memes.game.entity.BaseEntity;
-import memes.game.render.WorldRenderer;
 import memes.util.GameObject;
 import memes.util.Point;
 import org.newdawn.slick.Graphics;
@@ -16,13 +15,11 @@ public class World implements GameObject, Serializable {
     private Tile[][] tiles;
     private int xSize, ySize;
     private ArrayList<BaseEntity> entities;
-    private WorldRenderer renderer;
 
     public World(Tile[][] tiles, int xSize, int ySize) {
         this.tiles = tiles;
         this.xSize = xSize;
         this.ySize = ySize;
-        this.renderer = new WorldRenderer(this);
         this.entities = new ArrayList<>();
 
         initTiles();
@@ -105,8 +102,13 @@ public class World implements GameObject, Serializable {
 
     @Override
     public void render(Graphics graphics) {
-        renderer.render(0, 0);
-        entities.forEach(e -> e.render(graphics));
     }
 
+    public ArrayList<BaseEntity> getEntities() {
+        return entities;
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
 }

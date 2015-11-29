@@ -1,6 +1,5 @@
 package memes.game.event;
 
-import memes.game.entity.PlayerEntity;
 import memes.game.input.InputKey;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
@@ -11,16 +10,10 @@ public class InputEvent implements Packet, Serializable {
 
     private InputKey key;
     private boolean pressed;
-    private long playerID;
 
-    public InputEvent(InputKey key, boolean pressed, long playerID) {
+    public InputEvent(InputKey key, boolean pressed) {
         this.key = key;
         this.pressed = pressed;
-        this.playerID = playerID;
-    }
-
-    public long getPlayerID() {
-        return playerID;
     }
 
     public InputKey getKey() {

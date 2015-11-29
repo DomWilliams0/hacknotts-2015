@@ -6,8 +6,6 @@ import memes.game.world.World;
 import memes.game.world.gen.FileOfficeGenerator;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
-import memes.util.Constants;
-import org.newdawn.slick.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +28,10 @@ public class GameServer implements PacketHandler {
 
         // Start listening to connections
         netServer.addPacketHandler(this);
+    }
+
+    public void start() {
+        System.out.println("Starting server");
         netServer.start();
     }
 
@@ -43,5 +45,6 @@ public class GameServer implements PacketHandler {
     }
     public static void main(String[] args) throws Exception {
         INSTANCE = new GameServer();
+        INSTANCE.start();
     }
 }

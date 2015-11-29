@@ -8,9 +8,10 @@ import memes.net.packet.PacketType;
 import memes.util.Direction;
 import memes.util.Point;
 
+import java.io.Serializable;
 import java.util.BitSet;
 
-public class PlayerEntity extends HumanEntity implements IEventHandler {
+public class PlayerEntity extends HumanEntity implements IEventHandler, Serializable {
 
     private EventHandler<MoveEvent> movementHandlers;
     private BitSet currentDirections;

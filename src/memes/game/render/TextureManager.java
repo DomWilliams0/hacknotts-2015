@@ -36,7 +36,7 @@ public class TextureManager {
 
     public void init() {
         try {
-            Files.newDirectoryStream(Paths.get("res/terrain"), name -> name.endsWith(".png")).forEach(file -> load(file));
+            Files.newDirectoryStream(Paths.get("res/terrain"), name -> name.endsWith(".png")).forEach(file -> load(file.toFile()));
         } catch (IOException e) {
             e.printStackTrace();
         }

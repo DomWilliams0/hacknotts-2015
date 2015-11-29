@@ -48,6 +48,7 @@ public class NetClient extends Thread {
                 if (isServer) {
                     if (packet instanceof PlayerConnectPacket) {
                         PlayerConnectPacket connPacket = (PlayerConnectPacket) packet;
+                        System.out.println("connPacket received = " + connPacket);
 
                         World world = GameServer.INSTANCE.getWorld();
                         PlayerEntity player = new PlayerEntity(
@@ -56,7 +57,13 @@ public class NetClient extends Thread {
                                 world.getRandomSpawn(connPacket.getID()));
 
                         world.addEntity(player);
+
                         WorldPacket worldPacket = new WorldPacket(world);
+                        try {
+                            sendPacket(worldPacket);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
 
@@ -77,6 +84,10 @@ public class NetClient extends Thread {
 
     public void addPacketHandler(PacketHandler handler) {
         handlers.add(handler);
+    }
+
+    public void removePacketHandler(PacketHandler handler) {
+        handlers.remove(handler);
     }
 
     /**
@@ -117,16 +128,12 @@ public class NetClient extends Thread {
      * and gets all the server details
      *
      * @param playerName
-     * @return a World instance in sync with the server
      */
-    public World getServerWorld(long clientID, String playerName) throws Exception {
+    public void requestServerWorld(long clientID, String playerName) throws Exception {
         this.start();
 
         PlayerConnectPacket connPacket = new PlayerConnectPacket(clientID, playerName);
         sendPacket(connPacket);
-        // TODO: Send connection packet and get server data back
-
-        return null;
     }
 
     @Override

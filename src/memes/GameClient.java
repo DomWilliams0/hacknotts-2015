@@ -6,28 +6,38 @@ import memes.game.event.ActionHandler;
 import memes.game.event.InputEvent;
 import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
+import memes.game.render.WorldRenderer;
 import memes.game.world.World;
+import memes.net.PacketHandler;
+import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
+import memes.net.packet.WorldPacket;
 import memes.net.server.NetClient;
 import memes.util.Constants;
-import memes.util.Point;
 import org.newdawn.slick.*;
 
 import javax.swing.*;
 
-public class Game extends BasicGame {
+public class GameClient extends BasicGame implements PacketHandler {
 
-    public static Game INSTANCE;
+    public static GameClient INSTANCE;
 
     private NetClient client;
     private PlayerEntity player;
-    private World world;
+    private InputHandler input;
+    private GameContainer gameContainer;
 
-    public Game() {
+    private World world;
+    private WorldRenderer worldRenderer;
+
+    public GameClient() {
         // ALERT! Do not do any game initialisation in here, use
         // init(GameContainer) instead (so that OpenGL is already initialised etc.)
 
         super("Memes and more memes");
+    }
+
+    public void start() {
         System.out.println("Game starting");
 
         try {
@@ -44,6 +54,8 @@ public class Game extends BasicGame {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
+        this.gameContainer = gameContainer;
+
         // ask for host and username
         String[] guiSelection = showGUI();
         String username = guiSelection[0];
@@ -56,21 +68,18 @@ public class Game extends BasicGame {
         // load resources
         Animations.loadAll();
 
+        gameContainer.pause();
+
         try {
             client = NetClient.connectToServer(serverHost);
-            world = client.getServerWorld(client.getID(), username);
+            client.addPacketHandler(this);
+            client.requestServerWorld(client.getID(), username);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // init player
-        PlayerEntity testPlayer = new PlayerEntity(123, "Testificate", new Point(640, 640));
-        world.addEntity(testPlayer);
-
         // input
-        InputHandler input = new InputHandler(gameContainer);
-        input.addHandler(testPlayer);
-        input.addHandler(new ActionHandler());
+        input = new InputHandler(gameContainer);
         input.addHandler(event -> {
             if (event.getPacketType() == PacketType.Input) {
                 if (((InputEvent) event).getKey() == InputKey.EXIT) {
@@ -80,6 +89,27 @@ public class Game extends BasicGame {
             }
         });
     }
+
+    @Override
+    public void onPacketReceive(Packet packet) {
+        // set world
+        if (packet.getPacketType() == PacketType.World) {
+            System.out.println("Received world packet");
+
+            world = ((WorldPacket) packet).getWorld();
+
+            player = (PlayerEntity) world.getEntityFromID(client.getID());
+            player.loadAnimation();
+
+            worldRenderer = new WorldRenderer(world);
+
+            input.addHandler(player);
+            input.addHandler(new ActionHandler(player));
+
+            gameContainer.resume();
+        }
+    }
+
 
     /**
      * @return {username, server host}
@@ -97,7 +127,7 @@ public class Game extends BasicGame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         final int cols = 15;
-        JTextField userName = new JTextField("Top_Memer",cols);
+        JTextField userName = new JTextField("Top_Memer", cols);
         JTextField host = new JTextField("localhost", cols);
 
         panel.add(new JLabel("Username", SwingConstants.CENTER));
@@ -116,21 +146,27 @@ public class Game extends BasicGame {
         return new String[]{userName.getText(), host.getText()};
     }
 
-
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
 
         float delta = (float) i / 1000;
-        world.tick(delta);
+        if (world != null)
+            world.tick(delta);
     }
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         // render world
-        world.render(graphics);
+        if (worldRenderer != null)
+            worldRenderer.render(graphics, 0, 0);
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public static void main(String[] args) {
-        INSTANCE = new Game();
+        INSTANCE = new GameClient();
+        INSTANCE.start();
     }
 }
