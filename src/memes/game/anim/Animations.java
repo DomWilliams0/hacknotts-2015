@@ -86,7 +86,6 @@ public class Animations {
                     i, true, duration, true);
         }
 
-
         return anims;
     }
 

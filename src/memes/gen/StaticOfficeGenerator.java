@@ -6,26 +6,28 @@ import memes.world.World;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class StaticOfficeGenerator implements Generator {
 
     @Override
     public World genWorld(int xSize, int ySize) {
-        if (xSize < 0 || ySize < 0) throw new IllegalArgumentException("The int arguments cannot be less than 0");
-        Tile[][] tiles = new Tile[xSize][ySize];
+        Tile[][] tiles = null;
         try {
             Scanner in = new Scanner(new File("res/office.txt"));
-            int x = 0, y = 0;
+            xSize = Integer.MAX_VALUE;
+            LinkedList<String> lines = new LinkedList<>();
             while (in.hasNextLine()) {
-                // Read line as chars and convert them to tiles
-                char[] line = in.nextLine().toCharArray();
-                if (line.length != xSize)
-                    throw new IllegalStateException("Line length of office file is not equal to xSize");
-                for (char aLine : line) tiles[y][x++] = new Tile(getTileType(aLine));
-                y++;
-                // If we are at ySize, then stop reading the file
-                if (y == ySize) break;
+                String line = in.nextLine();
+                xSize = Math.min(xSize, line.length());
+                lines.add(line);
+            }
+            ySize = lines.size();
+            tiles = new Tile[xSize][ySize];
+            for(int y = 0; y < ySize; y++) {
+                char[] line = lines.get(y).toCharArray();
+                for(int x = 0; x < xSize; x++) tiles[x][y] = new Tile(getTileType(line[x]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -35,7 +37,7 @@ public class StaticOfficeGenerator implements Generator {
 
     private TileType getTileType(char ch) {
         switch (ch) {
-            case 'n':
+            case 'f':
                 return TileType.FLOOR;
             case 'd':
                 return TileType.DESK;
