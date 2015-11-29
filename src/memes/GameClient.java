@@ -6,6 +6,7 @@ import memes.game.event.ActionHandler;
 import memes.game.event.InputEvent;
 import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
+import memes.game.render.TextureManager;
 import memes.game.render.WorldRenderer;
 import memes.game.world.World;
 import memes.net.PacketHandler;
@@ -67,8 +68,7 @@ public class GameClient extends BasicGame implements PacketHandler {
 
         // load resources
         Animations.loadAll();
-
-        gameContainer.pause();
+        TextureManager.init();
 
         try {
             client = NetClient.connectToServer(serverHost);
@@ -105,8 +105,6 @@ public class GameClient extends BasicGame implements PacketHandler {
 
             input.addHandler(player);
             input.addHandler(new ActionHandler(player));
-
-            gameContainer.resume();
         }
     }
 

@@ -25,18 +25,26 @@ public class TextureManager {
         }
     }
 
-    private void load(File f) {
+    private TextureManager() {
+    }
+
+    private static void load(File f) {
         String name = f.getName();
+        System.out.println("loading file name = " + name);
         try {
-            imageMap.put(name.substring(name.lastIndexOf('/') + 1, name.indexOf('.')), new Image(f.getName()));
+            int extIndex = name.lastIndexOf('.');
+            if (extIndex != -1)
+                name = name.substring(0, extIndex);
+
+            imageMap.put(name, new Image(f.getAbsolutePath()));
         } catch (SlickException e) {
             e.printStackTrace();
         }
     }
 
-    public void init() {
+    public static void init() {
         try {
-            Files.newDirectoryStream(Paths.get("res/terrain"), name -> name.endsWith(".png")).forEach(file -> load(file.toFile()));
+            Files.newDirectoryStream(Paths.get("res/terrain"), "*.png").forEach(file -> load(file.toFile()));
         } catch (IOException e) {
             e.printStackTrace();
         }
