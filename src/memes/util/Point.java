@@ -29,17 +29,20 @@ public class Point {
     }
 
     /**
-     * @param point Point to mutate (the original is changed)
-     * @return The same point, mutated
+     * @return This, but mutated
      */
-    public static Point translate(Point point, double x, double y) {
-        point.x += x;
-        point.y += y;
-        return point;
+    public Point translate(double x, double y) {
+        this.x += x;
+        this.y += y;
+        return this;
     }
 
-    public void translate(double x, double y) {
-        translate(this, x, y);
+    /**
+     * @return This, but mutated
+     */
+    public Point add(Point p) {
+        translate(p.x, p.y);
+        return this;
     }
 
     @Override
