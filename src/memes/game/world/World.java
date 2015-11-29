@@ -65,6 +65,16 @@ public class World implements GameObject {
         return x < xSize && y < ySize && x >= 0 && y >= 0 ? Optional.of(tiles[x][y]) : Optional.<Tile>empty();
     }
 
+    /**
+     * @throws IllegalArgumentException if not found
+     */
+    public BaseEntity getEntityFromID(long id) {
+        return entities.stream()
+                .filter(e -> e.getID() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("An entity does not exist with the ID " + id));
+    }
+
     @Override
     public void tick(float delta) {
         entities.forEach(e -> e.tick(delta));
