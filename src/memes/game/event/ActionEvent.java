@@ -11,10 +11,12 @@ public class ActionEvent implements Packet, Serializable {
 
     public PlayerEntity player;
     public Tile tile;
+    public boolean flag;
 
-    public ActionEvent(PlayerEntity player, Tile tile) {
+    public ActionEvent(PlayerEntity player, Tile tile, boolean flag) {
         this.player = player;
         this.tile = tile;
+        this.flag = flag;
     }
 
     @Override

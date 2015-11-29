@@ -14,9 +14,12 @@ public abstract class TileMetadata {
     }
 
     public World world;
+    public int x, y;
 
-    public TileMetadata(World world) {
+    public TileMetadata(int x, int y, World world) {
         this.world = world;
+        this.x = x;
+        this.y = y;
     }
 
     public static class FloorMetadata extends TileMetadata {
@@ -24,7 +27,7 @@ public abstract class TileMetadata {
         public boolean a, b, c, d;
 
         public FloorMetadata(int x, int y, World world) {
-            super(world);
+            super(x, y, world);
         }
 
     }
@@ -36,7 +39,7 @@ public abstract class TileMetadata {
         public static final int THRESHOLD = 10;
 
         public ComputerMetadata(int x, int y, World world) {
-            super(world);
+            super(x, y, world);
         }
 
     }
@@ -46,7 +49,7 @@ public abstract class TileMetadata {
         public boolean sabotaged;
 
         public CoffeeMachineMetadata(int x, int y, World world) {
-            super(world);
+            super(x, y, world);
         }
 
     }

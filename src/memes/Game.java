@@ -2,6 +2,7 @@ package memes;
 
 import memes.game.anim.Animations;
 import memes.game.entity.PlayerEntity;
+import memes.game.event.ActionHandler;
 import memes.game.event.InputEvent;
 import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
@@ -60,6 +61,7 @@ public class Game extends BasicGame {
         // input
         InputHandler input = new InputHandler(gameContainer);
         input.addHandler(testPlayer);
+        input.addHandler(new ActionHandler());
         input.addHandler(event -> {
             if (event.getPacketType() == PacketType.Input) {
                 if (((InputEvent) event).getKey() == InputKey.EXIT) {
