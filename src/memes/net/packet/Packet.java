@@ -6,4 +6,8 @@ public interface Packet {
      * @return type of the packet
      */
     PacketType getPacketType();
+
+    long getSendTime();
+
+    void setSendTime(long time);
 }

@@ -20,6 +20,8 @@ public class NetClient extends Thread implements IEventHandler {
     protected ObjectOutputStream oos;
     protected long clientID;
 
+    private long lastPacketTime;
+
     protected List<IEventHandler> handlers;
 
     private boolean isServer;
@@ -31,6 +33,7 @@ public class NetClient extends Thread implements IEventHandler {
         this.isServer = isServer;
         this.clientID = clientID;
         this.handlers = new ArrayList<>();
+        this.lastPacketTime = 0L;
     }
 
     @Override
@@ -49,6 +52,14 @@ public class NetClient extends Thread implements IEventHandler {
 
 
                 if (isServer) {
+                    if (packet.getSendTime() < lastPacketTime)
+                        return;
+
+                    lastPacketTime = packet.getSendTime();
+
+
+
+
                     if (packet instanceof PlayerConnectPacket) {
                         PlayerConnectPacket connPacket = (PlayerConnectPacket) packet;
 
@@ -183,8 +194,10 @@ public class NetClient extends Thread implements IEventHandler {
     }
 
     public void sendPacket(Packet packet) throws IOException {
-        if (!socket.isClosed())
+        if (!socket.isClosed()) {
+            packet.setSendTime(System.nanoTime());
             oos.writeObject(packet);
+        }
     }
 
     public void sendText(String s) {
