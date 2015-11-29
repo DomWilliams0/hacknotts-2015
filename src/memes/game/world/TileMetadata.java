@@ -37,6 +37,8 @@ public abstract class TileMetadata {
 
     public static class CoffeeMachineMetadata extends TileMetadata {
 
+        public boolean sabotaged;
+
         public CoffeeMachineMetadata(int x, int y, World world) {
 
         }
