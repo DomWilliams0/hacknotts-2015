@@ -6,13 +6,16 @@ import org.newdawn.slick.Image;
 
 public enum TileType {
     FLOOR(
+            // Metadata factory
             (x, y, world) -> new TileMetadata.FloorMetadata(x, y, world),
             25, 0
     ),
     DESK(6, 5),
     WALL(23, 13),
     COMPUTER(
+            // Metadata factory
             (x, y, world) -> new TileMetadata.ComputerMetadata(x, y, world),
+            // onAction
             (tile, player) -> System.out.printf("%s just used a computer%n", player.toString()),
             18, 0
     );

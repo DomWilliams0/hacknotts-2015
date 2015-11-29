@@ -3,6 +3,7 @@ package memes.world;
 import memes.game.entity.BaseEntity;
 import memes.util.Point;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -10,7 +11,7 @@ public class World {
 
     private Tile[][] tiles;
     private int xSize, ySize;
-    private HashMap<Point, BaseEntity> entities = new HashMap<>();
+    private ArrayList<BaseEntity> entities = new ArrayList<>();
 
     public World(Tile[][] tiles, int xSize, int ySize) {
         this.tiles = tiles;
@@ -33,24 +34,10 @@ public class World {
 
     /**
      * Add an entity to the world, note that this will overwrite an entities at the same Point
-     * @param p - The point at which to spawn the entity
      * @param e - The entity to spawn
-     * @return True if the an entity existed at the point, otherwise false
      */
-    public boolean spawnEntity(Point p, BaseEntity e) {
-        if (entities.containsKey(p)) {
-            entities.put(p, e);
-            return true;
-        } else return false;
-    }
-
-    /**
-     * Returns the entity at the specified Point
-     * @param p - The point
-     * @return Optional.empty() if there is no entity at that point
-     */
-    public Optional<BaseEntity> getEntity(Point p) {
-        return entities.containsKey(p) ? Optional.of(entities.get(p)) : Optional.empty();
+    public void spawnEntity(BaseEntity e) {
+        entities.add(e);
     }
 
     public int getXSize() {

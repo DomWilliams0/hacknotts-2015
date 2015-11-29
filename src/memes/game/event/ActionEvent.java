@@ -5,7 +5,9 @@ import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
 import memes.world.Tile;
 
-public class ActionEvent implements Packet {
+import java.io.Serializable;
+
+public class ActionEvent implements Packet, Serializable {
 
     public PlayerEntity player;
     public Tile tile;

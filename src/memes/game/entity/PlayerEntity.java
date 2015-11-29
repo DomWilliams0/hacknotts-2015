@@ -42,41 +42,45 @@ public class PlayerEntity extends HumanEntity implements IEventHandler<Packet> {
             case Input: {
                 InputEvent event = (InputEvent) e;
                 InputKey key = event.getKey();
-                boolean pressed = event.isPressed();
+                if(key.getDirection() != null) {
+                    boolean pressed = event.isPressed();
 
-                currentDirections.set(key.ordinal(), pressed);
+                    currentDirections.set(key.ordinal(), pressed);
 
-                // stop
-                if (currentDirections.isEmpty())
-                    stopMoving();
-                else {
-                    int i = 0;
-                    Direction d = getMovementDirection();
+                    // stop
+                    if (currentDirections.isEmpty())
+                        stopMoving();
+                    else {
+                        int i = 0;
+                        Direction d = getMovementDirection();
 
-                    while (true) {
-                        i = currentDirections.nextSetBit(i + 1);
-                        if (i < 0)
-                            break;
+                        while (true) {
+                            i = currentDirections.nextSetBit(i + 1);
+                            if (i < 0)
+                                break;
 
-                        Direction newDir = Direction.values()[i];
+                            Direction newDir = Direction.values()[i];
 
-                        if (d == null)
-                            d = newDir;
-                        else
-                            d = d.combine(newDir);
+                            if (d == null)
+                                d = newDir;
+                            else
+                                d = d.combine(newDir);
+                        }
+
+                        changeDirection(d);
                     }
 
-                    changeDirection(d);
-                }
+                    // very basic shameful movement :(
+                    if (!pressed)
+                        stopMoving();
+                    else {
 
-                // very basic shameful movement :(
-                if (!pressed)
-                    stopMoving();
-                else {
+                        // parse direction
+                        Direction d = key.getDirection();
+                        startMoving(d);
+                    }
+                } else if(key == InputKey.ACTION) {
 
-                    // parse direction
-                    Direction d = key.getDirection();
-                    startMoving(d);
                 }
                 break;
             }
