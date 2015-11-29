@@ -25,32 +25,16 @@ public class StaticOfficeGenerator implements Generator {
             }
             ySize = lines.size();
             tiles = new Tile[xSize][ySize];
-            for(int y = 0; y < ySize; y++) {
+
+            for (int y = 0; y < ySize; y++) {
                 char[] line = lines.get(y).toCharArray();
-                for(int x = 0; x < xSize; x++) tiles[x][y] = new Tile(getTileType(line[x]));
+
+                for (int x = 0; x < xSize; x++)
+                    tiles[x][y] = new Tile(TileType.getFromChar(line[x]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return new World(tiles, xSize, ySize);
     }
-
-    private TileType getTileType(char ch) {
-        switch (ch) {
-            case 'f':
-                return TileType.FLOOR;
-            case 'd':
-                return TileType.DESK;
-            case 'w':
-                return TileType.WALL;
-            case 'c':
-                return TileType.COMPUTER;
-            case 'm':
-                return TileType.COFFEE_MACHINE;
-            default:
-                System.err.println("Unrecognised tile character: " + ch);
-                return null;
-        }
-    }
-
 }

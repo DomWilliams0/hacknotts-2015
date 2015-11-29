@@ -9,15 +9,15 @@ public enum TileType {
     FLOOR(
             // Metadata factory
             TileMetadata.FloorMetadata::new,
-            25, 0
+            24, 0
     ),
     DESK(6, 5),
-    WALL(23, 13),
+    WALL(24, 13),
     COFFEE_MACHINE(
             TileMetadata.CoffeeMachineMetadata::new,
             (tile, player) -> {
                 TileMetadata.CoffeeMachineMetadata meta = (TileMetadata.CoffeeMachineMetadata) tile.metadata;
-                if(player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
+                if (player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
                     player.caffeineLevel++;
                     System.out.printf("%s just drank some poo water%n", player);
                 }
@@ -27,11 +27,11 @@ public enum TileType {
             TileMetadata.ComputerMetadata::new,
             (tile, player) -> {
                 TileMetadata.ComputerMetadata meta = (TileMetadata.ComputerMetadata) tile.metadata;
-                if(meta.user == null) {
+                if (meta.user == null) {
                     meta.user = player.getUsername();
                     System.out.printf("%s is now bound to the computer%n", player);
                 } else {
-                    if(meta.user.equals(player.getUsername())) {
+                    if (meta.user.equals(player.getUsername())) {
                         meta.developmentProgress++;
                         System.out.printf("%s just programmed on the computer%n", player);
                     } else {
@@ -79,6 +79,21 @@ public enum TileType {
 
     public void render(TileMetadata meta, float x, float y) {
         renderer.render(img, x, y);
+    }
+
+    public static TileType getFromChar(char c) {
+        switch (c) {
+            case 'f':
+                return TileType.FLOOR;
+            case 'd':
+                return TileType.DESK;
+            case 'w':
+                return TileType.WALL;
+            case 'c':
+                return TileType.COMPUTER;
+            default:
+                throw new IllegalArgumentException("Invalid tile char: " + c);
+        }
     }
 
 }
