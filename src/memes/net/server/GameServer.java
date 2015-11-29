@@ -2,6 +2,7 @@ package memes.net.server;
 
 import memes.game.entity.BaseEntity;
 import memes.game.entity.PlayerEntity;
+import memes.game.event.MoveEvent;
 import memes.game.world.World;
 import memes.game.world.gen.FileOfficeGenerator;
 import memes.net.PacketHandler;
@@ -47,6 +48,19 @@ public class GameServer implements PacketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        // movement
+        else if (packet.getPacketType() == PacketType.Move) {
+
+            MoveEvent e = (MoveEvent) packet;
+            BaseEntity entity = world.getEntityFromID(e.getID());
+
+            entity.setPosition(e.getPosition());
+            if (e.isMoveStart())
+                entity.startMoving(e.getDirection(), e.getSpeed());
+            else
+                entity.stopMoving();
         }
     }
 

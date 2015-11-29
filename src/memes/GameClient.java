@@ -1,7 +1,6 @@
 package memes;
 
 import memes.game.entity.HumanEntity;
-import memes.game.render.anim.Animations;
 import memes.game.entity.PlayerEntity;
 import memes.game.event.ActionHandler;
 import memes.game.event.InputEvent;
@@ -9,6 +8,7 @@ import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
 import memes.game.render.TextureManager;
 import memes.game.render.WorldRenderer;
+import memes.game.render.anim.Animations;
 import memes.game.world.World;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
@@ -106,6 +106,8 @@ public class GameClient extends BasicGame implements PacketHandler {
                 }
             }
         });
+
+        input.addHandler(client);
     }
 
     @Override

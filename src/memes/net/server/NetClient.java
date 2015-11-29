@@ -1,10 +1,11 @@
 package memes.net.server;
 
 import memes.game.entity.PlayerEntity;
+import memes.game.event.IEventHandler;
 import memes.game.world.World;
 import memes.net.PacketHandler;
-import memes.net.packet.PlayerConnectPacket;
 import memes.net.packet.Packet;
+import memes.net.packet.PlayerConnectPacket;
 import memes.net.packet.WorldPacket;
 import memes.util.Constants;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -14,11 +15,12 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetClient extends Thread {
+public class NetClient extends Thread implements IEventHandler {
     protected Socket socket;
     protected ObjectInputStream ois;
     protected ObjectOutputStream oos;
     protected long clientID;
+
     protected List<PacketHandler> handlers;
 
     private boolean isServer;
@@ -181,7 +183,8 @@ public class NetClient extends Thread {
     }
 
     public void sendPacket(Packet packet) throws IOException {
-        oos.writeObject(packet);
+        if (!socket.isClosed())
+            oos.writeObject(packet);
     }
 
     public void sendText(String s) {
@@ -203,5 +206,16 @@ public class NetClient extends Thread {
 
     public Socket getSocket() {
         return socket;
+    }
+
+
+    @Override
+    public void onEvent(Packet event) {
+        try {
+            sendPacket(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -4,7 +4,6 @@ import memes.game.event.*;
 import memes.game.input.InputKey;
 import memes.game.world.TileMetadata;
 import memes.net.packet.Packet;
-import memes.net.packet.PacketType;
 import memes.util.Direction;
 import memes.util.Point;
 
@@ -32,13 +31,13 @@ public class PlayerEntity extends HumanEntity implements IEventHandler, Serializ
     @Override
     public void startMoving(Direction direction, int speed) {
         super.startMoving(direction, speed);
-        movementHandlers.callHandlers(new MoveEvent(this, PacketType.StartMove));
+        movementHandlers.callHandlers(new MoveEvent(this, true));
     }
 
     @Override
     public void stopMoving() {
         super.stopMoving();
-        movementHandlers.callHandlers(new MoveEvent(this, PacketType.EndMove));
+        movementHandlers.callHandlers(new MoveEvent(this, false));
     }
 
     @Override
