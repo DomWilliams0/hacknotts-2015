@@ -1,17 +1,15 @@
 package memes.game.entity;
 
-import memes.game.event.EventHandler;
-import memes.game.event.IEventHandler;
-import memes.game.event.InputEvent;
-import memes.game.event.MoveEvent;
+import memes.game.event.*;
 import memes.game.input.InputKey;
+import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
 import memes.util.Direction;
 import memes.util.Point;
 
 import java.util.BitSet;
 
-public class PlayerEntity extends HumanEntity implements IEventHandler<InputEvent> {
+public class PlayerEntity extends HumanEntity implements IEventHandler<Packet> {
 
     private EventHandler<MoveEvent> movementHandlers;
     private BitSet currentDirections;
@@ -39,43 +37,53 @@ public class PlayerEntity extends HumanEntity implements IEventHandler<InputEven
     }
 
     @Override
-    public void onEvent(InputEvent event) {
-        InputKey key = event.getKey();
-        boolean pressed = event.isPressed();
+    public void onEvent(Packet e) {
+        switch (e.getPacketType()) {
+            case Input: {
+                InputEvent event = (InputEvent) e;
+                InputKey key = event.getKey();
+                boolean pressed = event.isPressed();
 
-        currentDirections.set(key.ordinal(), pressed);
+                currentDirections.set(key.ordinal(), pressed);
 
-        // stop
-        if (currentDirections.isEmpty())
-            stopMoving();
-        else {
-            int i = 0;
-            Direction d = getMovementDirection();
+                // stop
+                if (currentDirections.isEmpty())
+                    stopMoving();
+                else {
+                    int i = 0;
+                    Direction d = getMovementDirection();
 
-            while (true) {
-                i = currentDirections.nextSetBit(i+1);
-                if (i < 0)
-                    break;
+                    while (true) {
+                        i = currentDirections.nextSetBit(i + 1);
+                        if (i < 0)
+                            break;
 
-                Direction newDir = Direction.values()[i];
+                        Direction newDir = Direction.values()[i];
 
-                if (d == null)
-                    d = newDir;
-                else
-                    d = d.combine(newDir);
+                        if (d == null)
+                            d = newDir;
+                        else
+                            d = d.combine(newDir);
+                    }
+
+                    changeDirection(d);
+                }
+
+                // very basic shameful movement :(
+                if (!pressed)
+                    stopMoving();
+                else {
+
+                    // parse direction
+                    Direction d = key.getDirection();
+                    startMoving(d);
+                }
+                break;
             }
-
-            changeDirection(d);
-        }
-
-        // very basic shameful movement :(
-        if (!pressed)
-            stopMoving();
-        else {
-
-            // parse direction
-            Direction d = key.getDirection();
-            startMoving(d);
+            case Action:
+                ActionEvent event = (ActionEvent)e;
+                event.tile.type.onAction.onAction(event.tile, event.player);
+                break;
         }
     }
 
