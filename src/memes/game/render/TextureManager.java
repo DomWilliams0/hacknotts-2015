@@ -18,7 +18,7 @@ public class TextureManager {
 
     static {
         try {
-            sprites = new SpriteSheet(new Image("res/terrain/interior_transparent.png"),
+            sprites = new SpriteSheet(new Image("res/terrain/sheet/interior_transparent.png"),
                     Constants.TILE_LOAD_SIZE, Constants.TILE_LOAD_SIZE, 1, 0);
         } catch (SlickException e) {
             e.printStackTrace();
