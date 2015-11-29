@@ -26,6 +26,13 @@ public class World implements GameObject {
     }
 
     /**
+     * Send the updated world to clients
+     */
+    public void update() {
+        //TODO
+    }
+
+    /**
      * Initialises the metadata for each of the world's tiles.
      * Must be called after the world has been generated.
      */

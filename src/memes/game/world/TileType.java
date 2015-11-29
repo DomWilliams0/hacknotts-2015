@@ -18,18 +18,21 @@ public enum TileType {
             (tile, player, sabotage) -> {
                 TileMetadata.CoffeeMachineMetadata meta = (TileMetadata.CoffeeMachineMetadata) tile.metadata;
                 if (sabotage) {
-                    if (!meta.sabotaged) meta.sabotaged = true;
-                    System.out.printf("%s just sabotaged the coffee machine%n", player);
-
-
+                    if (!meta.sabotaged) {
+                        meta.sabotaged = true;
+                        System.out.printf("%s just sabotaged the coffee machine%n", player);
+                        meta.world.update();
+                    }
                 } else if (player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
                     if (meta.sabotaged) {
                         player.caffeineLevel = Math.max(player.caffeineLevel - 10, 0);
                         meta.sabotaged = false;
                         System.out.printf("%s just drank a shit coffee%n", player);
+                        meta.world.update();
                     } else {
                         player.caffeineLevel++;
                         System.out.printf("%s just drank some coffee%n", player);
+                        meta.world.update();
                     }
                 }
             }
@@ -44,6 +47,7 @@ public enum TileType {
                     meta.user = player.getUsername();
                     player.computer = meta;
                     System.out.printf("%s is now bound to the computer%n", player);
+                    meta.world.update();
                     return;
                 }
 
@@ -51,6 +55,7 @@ public enum TileType {
                 if (meta.user.equals(player.getUsername())) {
                     meta.developmentProgress++;
                     System.out.printf("%s just programmed on the computer%n", player);
+                    meta.world.update();
                     return;
                 }
 
@@ -58,6 +63,7 @@ public enum TileType {
                 if (sabotage) {
                     meta.developmentProgress--;
                     System.out.printf("%s just sabotaged the computer%n", player);
+                    meta.world.update();
                     return;
                 }
 
@@ -65,6 +71,7 @@ public enum TileType {
                 if (player.computer != null) {
                     player.computer.developmentProgress++;
                     System.out.printf("%s just stole some code! (sneaky bugger)%n", player);
+                    meta.world.update();
                     return;
                 }
 
