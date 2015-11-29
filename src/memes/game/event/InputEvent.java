@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class InputEvent implements Packet, Serializable {
 
+    private long sendTime;
     private InputKey key;
     private boolean pressed;
 
@@ -35,5 +36,15 @@ public class InputEvent implements Packet, Serializable {
                 "key=" + key +
                 ", pressed=" + pressed +
                 '}';
+    }
+
+    @Override
+    public long getSendTime() {
+        return sendTime;
+    }
+
+    @Override
+    public void setSendTime(long time) {
+        sendTime = time;
     }
 }

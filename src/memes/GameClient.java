@@ -1,16 +1,19 @@
 package memes;
 
+import memes.game.entity.BaseEntity;
 import memes.game.entity.HumanEntity;
 import memes.game.entity.PlayerEntity;
 import memes.game.event.ActionHandler;
+import memes.game.event.IEventHandler;
 import memes.game.event.InputEvent;
+import memes.game.event.MoveEvent;
 import memes.game.input.InputHandler;
 import memes.game.input.InputKey;
 import memes.game.render.TextureManager;
 import memes.game.render.WorldRenderer;
 import memes.game.render.anim.Animations;
+import memes.game.render.anim.HumanEntityRenderer;
 import memes.game.world.World;
-import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
 import memes.net.packet.PlayerConnectPacket;
@@ -23,8 +26,10 @@ import org.newdawn.slick.*;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GameClient extends BasicGame implements PacketHandler {
+public class GameClient extends BasicGame implements IEventHandler {
 
     public static GameClient INSTANCE;
 
@@ -35,22 +40,26 @@ public class GameClient extends BasicGame implements PacketHandler {
 
     private World world;
     private WorldRenderer worldRenderer;
+    private List<HumanEntityRenderer> humanRenderers;
 
     public GameClient() {
         // ALERT! Do not do any game initialisation in here, use
         // init(GameContainer) instead (so that OpenGL is already initialised etc.)
 
         super("Memes and more memes");
+        humanRenderers = new ArrayList<>();
     }
 
     public void start() {
         System.out.println("Game starting");
 
         try {
-            new AppGameContainer(this,
+            AppGameContainer appGameContainer = new AppGameContainer(this,
                     Constants.WINDOW_SIZE.getIntX(),
                     Constants.WINDOW_SIZE.getIntY(),
-                    false).start();
+                    false);
+            appGameContainer.setTargetFrameRate(15);
+            appGameContainer.start();
 
         } catch (SlickException e) {
             System.err.println("Failed to start game: " + e.getMessage());
@@ -61,6 +70,7 @@ public class GameClient extends BasicGame implements PacketHandler {
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
         this.gameContainer = gameContainer;
+        gameContainer.setAlwaysRender(true);
 
         // ask for host and username
         String[] guiSelection = showGUI();
@@ -79,8 +89,13 @@ public class GameClient extends BasicGame implements PacketHandler {
         if (serverHost.isEmpty()) {
             try {
                 GameServer.INSTANCE = new GameServer();
-                GameServer.INSTANCE.start();
                 serverHost = "localhost";
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                GameServer.INSTANCE.start();
             } catch (IOException e) {
                 System.err.println("Could not host server");
                 e.printStackTrace();
@@ -106,25 +121,28 @@ public class GameClient extends BasicGame implements PacketHandler {
                 }
             }
         });
-
-        input.addHandler(client);
     }
 
+    /**
+     * From the server
+     */
     @Override
     public void onPacketReceive(Packet packet) {
+        System.out.println("[game client] got packet from NetClient (" + client.isServer() + ") " + packet);
+
         // set world
         if (packet.getPacketType() == PacketType.World) {
             System.out.println("Received world packet");
 
             world = ((WorldPacket) packet).getWorld();
-            world.getEntities().forEach(e -> {
-                if (e instanceof HumanEntity)
-                    ((HumanEntity) e).loadAnimation();
-            });
-
 
             player = (PlayerEntity) world.getEntityFromID(client.getID());
-            player.loadAnimation();
+            player.addHandler(client);
+            world.getEntities().forEach(e -> {
+                if (e instanceof HumanEntity)
+                    humanRenderers.add(new HumanEntityRenderer((HumanEntity) e));
+            });
+
 
             worldRenderer = new WorldRenderer(world);
 
@@ -140,9 +158,25 @@ public class GameClient extends BasicGame implements PacketHandler {
             if (cp.getID() == client.getID()) return;
 
             PlayerEntity newPlayer = new PlayerEntity(cp.getID(), cp.getUsername(), new Point(64, 64));
-            newPlayer.loadAnimation();
+            newPlayer.addHandler(client);
             world.addEntity(newPlayer);
+            humanRenderers.add(new HumanEntityRenderer(newPlayer));
+        }
 
+        // movement
+        else if (packet.getPacketType() == PacketType.Move) {
+
+            MoveEvent e = (MoveEvent) packet;
+            if (e.getID() == client.getID())
+                return;
+
+            BaseEntity entity = world.getEntityFromID(e.getID());
+
+            entity.setPosition(e.getPosition());
+            if (e.isMoveStart())
+                entity.startMoving(e.getDirection(), e.getSpeed());
+            else
+                entity.stopMoving();
         }
     }
 
@@ -195,6 +229,8 @@ public class GameClient extends BasicGame implements PacketHandler {
         // render world
         if (worldRenderer != null)
             worldRenderer.render(graphics, 0, 0);
+
+        humanRenderers.forEach(e -> e.render(graphics));
     }
 
     public World getWorld() {

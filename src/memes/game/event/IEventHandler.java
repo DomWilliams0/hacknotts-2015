@@ -4,6 +4,6 @@ import memes.net.packet.Packet;
 
 public interface IEventHandler {
 
-    void onEvent(Packet event);
+    void onPacketReceive(Packet event);
 
 }

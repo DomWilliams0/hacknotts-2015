@@ -14,6 +14,7 @@ public class MoveEvent implements Packet, Serializable {
     private int speed;
     private Direction direction;
     private boolean isMoveStart;
+    private long sendTime;
 
     public MoveEvent(BaseEntity entity, boolean starting) {
         this.position = new Point(entity.getPixelPosition());
@@ -58,5 +59,15 @@ public class MoveEvent implements Packet, Serializable {
                 ", direction=" + direction +
                 ", isMoveStart=" + isMoveStart +
                 '}';
+    }
+
+    @Override
+    public long getSendTime() {
+        return sendTime;
+    }
+
+    @Override
+    public void setSendTime(long time) {
+        sendTime = time;
     }
 }

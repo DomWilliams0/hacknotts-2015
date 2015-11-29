@@ -108,4 +108,8 @@ public abstract class BaseEntity implements GameObject, Serializable {
     public void setPosition(Point position) {
         this.position = position;
     }
+
+    public Shape getAABB() {
+        return aabb;
+    }
 }

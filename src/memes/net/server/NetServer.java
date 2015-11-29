@@ -1,11 +1,10 @@
 package memes.net.server;
 
-import memes.net.PacketHandler;
+import memes.game.event.IEventHandler;
 import memes.net.packet.Packet;
 import memes.util.Constants;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -19,7 +18,7 @@ public class NetServer {
     private Queue<Packet> sendQueue, recvQueue;
 
     private Thread listenThread;
-    protected List<PacketHandler> handlers;
+    protected List<IEventHandler> handlers;
 
     private boolean isRunning;
 
@@ -43,7 +42,7 @@ public class NetServer {
         isRunning = false;
     }
 
-    public void addPacketHandler(PacketHandler handler) {
+    public void addIEventHandler(IEventHandler handler) {
         handlers.add(handler);
     }
 
@@ -84,7 +83,7 @@ public class NetServer {
         }
     }
 
-    public void send(Packet packet) throws IOException {
+    public void broadcast(Packet packet) throws IOException {
         send(packet, -1);
     }
 
@@ -98,8 +97,7 @@ public class NetServer {
         if (cs == null)
             throw new IllegalArgumentException("Client doesn't exist. Wtf");
 
-        ObjectOutputStream oos = new ObjectOutputStream(cs.getSocket().getOutputStream());
-        oos.writeObject(packet);
+        cs.sendPacket(packet);
     }
 
     private void sendAll(Packet packet) throws IOException {

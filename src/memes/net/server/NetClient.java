@@ -3,7 +3,6 @@ package memes.net.server;
 import memes.game.entity.PlayerEntity;
 import memes.game.event.IEventHandler;
 import memes.game.world.World;
-import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.net.packet.PlayerConnectPacket;
 import memes.net.packet.WorldPacket;
@@ -21,7 +20,9 @@ public class NetClient extends Thread implements IEventHandler {
     protected ObjectOutputStream oos;
     protected long clientID;
 
-    protected List<PacketHandler> handlers;
+    private long lastPacketTime;
+
+    protected List<IEventHandler> handlers;
 
     private boolean isServer;
 
@@ -32,6 +33,7 @@ public class NetClient extends Thread implements IEventHandler {
         this.isServer = isServer;
         this.clientID = clientID;
         this.handlers = new ArrayList<>();
+        this.lastPacketTime = 0L;
     }
 
     @Override
@@ -46,11 +48,20 @@ public class NetClient extends Thread implements IEventHandler {
                     throw new UnsupportedOperationException("Received object is not a Packet. Uh wat");
 
                 Packet packet = (Packet) o;
+                System.out.println("[server: " + isServer + "] packet received = " + packet);
+
 
                 if (isServer) {
+                    if (packet.getSendTime() < lastPacketTime)
+                        return;
+
+                    lastPacketTime = packet.getSendTime();
+
+
+
+
                     if (packet instanceof PlayerConnectPacket) {
                         PlayerConnectPacket connPacket = (PlayerConnectPacket) packet;
-                        System.out.println("[server] connPacket received = " + connPacket);
 
                         World world = GameServer.INSTANCE.getWorld();
                         PlayerEntity player = new PlayerEntity(
@@ -83,11 +94,11 @@ public class NetClient extends Thread implements IEventHandler {
         }
     }
 
-    public void addPacketHandler(PacketHandler handler) {
+    public void addPacketHandler(IEventHandler handler) {
         handlers.add(handler);
     }
 
-    public void removePacketHandler(PacketHandler handler) {
+    public void removePacketHandler(IEventHandler handler) {
         handlers.remove(handler);
     }
 
@@ -110,7 +121,7 @@ public class NetClient extends Thread implements IEventHandler {
         if (!hs.equals(Constants.HANDSHAKE_SERVER))
             throw new IllegalStateException("Did not receive valid server handshake");
 
-        // send client handshake
+        // broadcast client handshake
         dos.writeUTF(Constants.HANDSHAKE_CLIENT);
 
         // receive client id
@@ -152,7 +163,7 @@ public class NetClient extends Thread implements IEventHandler {
     /**
      * Called by Server to handshake with a client
      *
-     * @param clientID id to send to client
+     * @param clientID id to broadcast to client
      * @return true if a successful connection
      * @throws IOException
      */
@@ -183,8 +194,10 @@ public class NetClient extends Thread implements IEventHandler {
     }
 
     public void sendPacket(Packet packet) throws IOException {
-        if (!socket.isClosed())
+        if (!socket.isClosed()) {
+            packet.setSendTime(System.nanoTime());
             oos.writeObject(packet);
+        }
     }
 
     public void sendText(String s) {
@@ -210,12 +223,16 @@ public class NetClient extends Thread implements IEventHandler {
 
 
     @Override
-    public void onEvent(Packet event) {
+    public void onPacketReceive(Packet event) {
         try {
             sendPacket(event);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public boolean isServer() {
+        return isServer;
     }
 }

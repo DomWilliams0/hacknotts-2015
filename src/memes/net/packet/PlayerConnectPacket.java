@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class PlayerConnectPacket implements Packet, Serializable {
     private String username;
     private long entityID;
+    private long sendTime;
 
     public PlayerConnectPacket(long entityID, String username) {
         this.username = username;
@@ -14,6 +15,7 @@ public class PlayerConnectPacket implements Packet, Serializable {
     public String getUsername() {
         return username;
     }
+
     public long getID() {
         return entityID;
     }
@@ -21,5 +23,15 @@ public class PlayerConnectPacket implements Packet, Serializable {
     @Override
     public PacketType getPacketType() {
         return PacketType.Connect;
+    }
+
+    @Override
+    public long getSendTime() {
+        return sendTime;
+    }
+
+    @Override
+    public void setSendTime(long time) {
+        sendTime = time;
     }
 }
