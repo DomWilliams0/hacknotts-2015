@@ -2,6 +2,7 @@ package memes.game.entity;
 
 import memes.game.event.*;
 import memes.game.input.InputKey;
+import memes.game.world.TileMetadata;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
 import memes.util.Direction;
@@ -15,6 +16,7 @@ public class PlayerEntity extends HumanEntity implements IEventHandler {
     private BitSet currentDirections;
     public static final int MAX_CAFFEINE = 50;
     public int caffeineLevel = MAX_CAFFEINE;
+    public TileMetadata.ComputerMetadata computer;
 
     public PlayerEntity(Point position, String username) {
         super(position, username);
