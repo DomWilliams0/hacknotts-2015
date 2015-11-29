@@ -1,6 +1,6 @@
-package memes.world;
+package memes.game.world;
 
-import memes.render.TileRenderer;
+import memes.game.render.TileRenderer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 

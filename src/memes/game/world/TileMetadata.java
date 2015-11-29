@@ -1,4 +1,4 @@
-package memes.world;
+package memes.game.world;
 
 /**
  * Represents metadata that is specific to tile types, and belongs to a tile object.

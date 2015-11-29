@@ -1,6 +1,6 @@
-package memes.gen;
+package memes.game.world.gen;
 
-import memes.world.World;
+import memes.game.world.World;
 
 public interface Generator {
 

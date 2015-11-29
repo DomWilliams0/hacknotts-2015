@@ -3,7 +3,7 @@ package memes.game.event;
 import memes.game.entity.PlayerEntity;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
-import memes.world.Tile;
+import memes.game.world.Tile;
 
 import java.io.Serializable;
 

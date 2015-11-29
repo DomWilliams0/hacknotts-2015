@@ -1,8 +1,8 @@
-package memes.gen;
+package memes.game.world.gen;
 
-import memes.world.Tile;
-import memes.world.TileType;
-import memes.world.World;
+import memes.game.world.Tile;
+import memes.game.world.TileType;
+import memes.game.world.World;
 
 import java.io.File;
 import java.io.FileNotFoundException;

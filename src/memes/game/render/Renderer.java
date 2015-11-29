@@ -1,4 +1,4 @@
-package memes.render;
+package memes.game.render;
 
 public interface Renderer {
 
