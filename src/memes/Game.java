@@ -12,6 +12,8 @@ import memes.util.Constants;
 import memes.util.Point;
 import org.newdawn.slick.*;
 
+import javax.swing.*;
+
 public class Game extends BasicGame {
 
     private World world;
@@ -36,6 +38,15 @@ public class Game extends BasicGame {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
+        // ask for host and username
+        String[] guiSelection = showGUI();
+        String username = guiSelection[0];
+        String serverHost = guiSelection[1]; // todo inetaddress
+
+        // a bit of validation
+        if (username.isEmpty() || serverHost.isEmpty())
+            throw new IllegalArgumentException("Enter all fields you fool!");
+
         // load resources
         Animations.loadAll();
 
@@ -43,7 +54,7 @@ public class Game extends BasicGame {
         world = (new StaticOfficeGenerator()).genWorld(19, 5);
 
         // init player
-        PlayerEntity testPlayer = new PlayerEntity(new Point(640, 640), "Top_Memer");
+        PlayerEntity testPlayer = new PlayerEntity(new Point(640, 640), username);
         world.addEntity(testPlayer);
 
         // input
@@ -57,6 +68,41 @@ public class Game extends BasicGame {
                 }
             }
         });
+    }
+
+    /**
+     * @return {username, server host}
+     */
+    private String[] showGUI() {
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
+            System.out.println("Could not get a dank UI :(");
+        }
+
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        final int cols = 15;
+        JTextField userName = new JTextField(cols);
+        JTextField host = new JTextField(cols);
+
+        panel.add(new JLabel("Username", SwingConstants.CENTER));
+        panel.add(userName);
+
+        panel.add(new JLabel("Server IP", SwingConstants.CENTER));
+        panel.add(host);
+
+        int choice = JOptionPane.showOptionDialog(null, panel, "The Memiest Meme You've Ever Memed",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+
+        // nah
+        if (choice != JOptionPane.OK_OPTION)
+            System.exit(0);
+
+        return new String[]{userName.getText(), host.getText()};
     }
 
 
