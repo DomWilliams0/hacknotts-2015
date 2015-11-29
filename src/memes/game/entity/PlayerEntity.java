@@ -13,6 +13,8 @@ public class PlayerEntity extends HumanEntity implements IEventHandler {
 
     private EventHandler<MoveEvent> movementHandlers;
     private BitSet currentDirections;
+    public static final int MAX_CAFFEINE = 50;
+    public int caffeineLevel = MAX_CAFFEINE;
 
     public PlayerEntity(Point position, String username) {
         super(position, username);

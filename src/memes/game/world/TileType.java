@@ -1,5 +1,6 @@
 package memes.game.world;
 
+import memes.game.entity.PlayerEntity;
 import memes.game.render.TileRenderer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -14,16 +15,30 @@ public enum TileType {
     WALL(23, 13),
     COFFEE_MACHINE(
             TileMetadata.CoffeeMachineMetadata::new,
-            (tile, player) -> System.out.printf("%s just used a coffee machine%n", player)
+            (tile, player) -> {
+                TileMetadata.CoffeeMachineMetadata meta = (TileMetadata.CoffeeMachineMetadata) tile.metadata;
+                if(player.caffeineLevel < PlayerEntity.MAX_CAFFEINE) {
+                    player.caffeineLevel++;
+                    System.out.printf("%s just drank some poo water%n", player);
+                }
+            }
     ),
     COMPUTER(
-            // Metadata factory
             TileMetadata.ComputerMetadata::new,
-            // onAction
             (tile, player) -> {
                 TileMetadata.ComputerMetadata meta = (TileMetadata.ComputerMetadata) tile.metadata;
-                meta.developmentProgress++;
-                System.out.printf("%s dev for tile is now %d%n", player.toString(), meta.developmentProgress);
+                if(meta.user == null) {
+                    meta.user = player.getUsername();
+                    System.out.printf("%s is now bound to the computer%n", player);
+                } else {
+                    if(meta.user.equals(player.getUsername())) {
+                        meta.developmentProgress++;
+                        System.out.printf("%s just programmed on the computer%n", player);
+                    } else {
+                        meta.developmentProgress--;
+                        System.out.printf("%s just sabotaged the computer%n", player);
+                    }
+                }
             }
     );
 
