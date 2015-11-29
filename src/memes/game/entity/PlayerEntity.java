@@ -15,8 +15,8 @@ public class PlayerEntity extends HumanEntity implements IEventHandler, Serializ
 
     private EventHandler<MoveEvent> movementHandlers;
     private BitSet currentDirections;
-    public static final int MAX_CAFFEINE = 50;
-    public int caffeineLevel = MAX_CAFFEINE;
+    public static final int MAX_CAFFEINE = 50, MAX_RELAXATION = 50;
+    public int caffeineLevel = MAX_CAFFEINE, relaxationLevel = MAX_RELAXATION;
     public TileMetadata.ComputerMetadata computer;
 
     public PlayerEntity(long entityID, String username, Point position) {

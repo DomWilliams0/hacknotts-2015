@@ -56,4 +56,14 @@ public abstract class TileMetadata implements Serializable {
 
     }
 
+    public static class ChairMetadata extends TileMetadata {
+
+        public boolean sabotaged;
+
+        public ChairMetadata(int x, int y, World world) {
+            super(x, y, world);
+        }
+
+    }
+
 }

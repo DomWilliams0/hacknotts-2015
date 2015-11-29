@@ -8,6 +8,29 @@ import org.newdawn.slick.SlickException;
 import java.io.Serializable;
 
 public enum TileType implements Serializable {
+    CHAIR(
+            TileMetadata.ChairMetadata::new,
+            (tile, player, sabotage) -> {
+                TileMetadata.ChairMetadata meta = (TileMetadata.ChairMetadata) tile.metadata;
+                if(sabotage) {
+                    if(!meta.sabotaged) {
+                        meta.sabotaged = true;
+                        System.out.printf("%s sabotaged a chair%n", player);
+                        meta.world.update();
+                    }
+                } else if (meta.sabotaged) {
+                    if(player.relaxationLevel < PlayerEntity.MAX_RELAXATION) player.relaxationLevel++;
+                    System.out.printf("%s just sat on a chair%n", player);
+                    meta.world.update();
+                } else {
+                    if(player.relaxationLevel > 0) player.relaxationLevel--;
+                    meta.sabotaged = false;
+                    System.out.printf("%s just sat down on a sabotaged chair!%n", player);
+                    meta.world.update();
+                }
+            },
+            0, 7
+    ),
     FLOOR(
             // Metadata factory
             TileMetadata.FloorMetadata::new,
@@ -102,9 +125,6 @@ public enum TileType implements Serializable {
 
     TileType(TileMetadata.MetadataFactory factory, TileActionListener onAction) {
         this(factory, TileRenderer.standardRenderer, onAction, -1, -1);
-
-
-        //img = new Image("res/terrain/" + this.name().toLowerCase() + ".png");
     }
 
     TileType(TileMetadata.MetadataFactory factory, int spriteX, int spriteY) {
@@ -132,6 +152,8 @@ public enum TileType implements Serializable {
                 return TileType.COFFEE_MACHINE;
             case 'd':
                 return TileType.DESK;
+            case 'b':
+                return TileType.CHAIR;
             default:
                 throw new IllegalArgumentException("Invalid tile char: " + ch);
         }
