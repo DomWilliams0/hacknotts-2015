@@ -41,8 +41,9 @@ public class PlayerEntity extends HumanEntity implements IEventHandler, Serializ
     }
 
     @Override
-    public void onEvent(Packet e) {
+    public void onPacketReceive(Packet e) {
         switch (e.getPacketType()) {
+
             // input
             case Input: {
                 InputEvent event = (InputEvent) e;

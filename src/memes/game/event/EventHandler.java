@@ -20,7 +20,13 @@ public class EventHandler<E extends Packet> implements Serializable {
     }
 
     public void callHandlers(E event) {
-        handlers.stream().forEach(e -> e.onEvent(event));
+        handlers.stream().forEach(e -> e.onPacketReceive(event));
     }
 
+    @Override
+    public String toString() {
+        return "EventHandler{" +
+                "handlers=" + handlers +
+                '}';
+    }
 }

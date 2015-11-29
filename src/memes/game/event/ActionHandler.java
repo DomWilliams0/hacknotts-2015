@@ -16,7 +16,7 @@ public class ActionHandler implements IEventHandler {
     }
 
     @Override
-    public void onEvent(Packet event) {
+    public void onPacketReceive(Packet event) {
         switch (event.getPacketType()) {
             case Input:
                 InputEvent e = (InputEvent) event;
