@@ -50,4 +50,11 @@
 >> Nerf guns to fire at players to make them lose 
    motivation, and interrupt their working?
 
+<<-----MUSIC----->>
 
+>> mainTheme.ogg will play for the majority of the game.
+>> caffeineMusic.ogg will play after the player has 
+   drank a cup of coffee (or two).
+>> sleepMusic.ogg will play either when the player
+   becomes completely decaffeinated, or when the
+   player is being disciplined by the manager.
