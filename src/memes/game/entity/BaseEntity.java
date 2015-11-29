@@ -3,14 +3,13 @@ package memes.game.entity;
 import memes.game.world.World;
 import memes.util.Constants;
 import memes.util.Direction;
-import memes.util.GameObject;
 import memes.util.Point;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import java.io.Serializable;
 
-public abstract class BaseEntity implements GameObject, Serializable {
+public abstract class BaseEntity implements Serializable {
 
     private static long LASTID = 0;
 
@@ -45,6 +44,8 @@ public abstract class BaseEntity implements GameObject, Serializable {
         this.movementDirection = Direction.SOUTH;
 
     }
+
+    public abstract void tick(float delta);
 
     public World getWorld() {
         return world;

@@ -18,61 +18,64 @@ import java.util.TreeMap;
 public class WorldRenderer {
 
     private World world;
+    private Point playerPos;
+    private Map<Point, String> computerLabels;
 
     public WorldRenderer(World world) {
         this.world = world;
+        this.playerPos = Point.EMPTY;
+        computerLabels = new TreeMap<>();
     }
 
-    public void render(Graphics graphics, double cameraX, double cameraY) {
-        // These represent by how many pixels the tiles should be rendered off the screen
-        double xOffScreen = cameraX % Constants.TILE_SIZE;
-        double yOffScreen = cameraY % Constants.TILE_SIZE;
-        // The world coordinates of the first and last tiles
-        int firstTileX = (int) (cameraX - xOffScreen) / Constants.TILE_SIZE;
-        int firstTileY = (int) (cameraY - yOffScreen) / Constants.TILE_SIZE;
+    public void render(Graphics graphics) {
 
-        int lastTileX = Math.min((int) (cameraX + Constants.WINDOW_SIZE.getIntX() +
-                (Constants.TILE_SIZE - (cameraX % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getXSize());
+        double camX = playerPos.getX() - (Constants.WINDOW_SIZE.getX() / 2);
+        double camY = playerPos.getY() - (Constants.WINDOW_SIZE.getY() / 2);
 
-        int lastTileY = Math.min((int) (cameraY + Constants.WINDOW_SIZE.getIntY() +
-                (Constants.TILE_SIZE - (cameraY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
+        double xOffScreen = camX % Constants.TILE_SIZE;
+        double yOffScreen = camY % Constants.TILE_SIZE;
 
-        Map<Point, String> computerLabels = new TreeMap<>();
+        int firstTileX = Math.max(0, Math.min(world.getXSize(), (int) (camX - xOffScreen) / Constants.TILE_SIZE));
+        int firstTileY = Math.max(0, Math.min(world.getYSize(), (int) (camY - yOffScreen) / Constants.TILE_SIZE));
+
+        int lastTileX = Math.min((int) (camX + Constants.WINDOW_SIZE.getIntX() +
+                (Constants.TILE_SIZE - (camX % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getXSize());
+        int lastTileY = Math.min((int) (camY + Constants.WINDOW_SIZE.getIntY() +
+                (Constants.TILE_SIZE - (camY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
+
+        computerLabels.clear();
+
         for (int x = firstTileX; x < lastTileX; x++) {
-            // The screen coord that the tile should be rendered too, can be negative
-            float pixelX = (float) ((cameraX + ((x - firstTileX) * Constants.TILE_SIZE)) - xOffScreen);
-
             for (int y = firstTileY; y < lastTileY; y++) {
-                float pixelY = (float) ((cameraY + ((y - firstTileY) * Constants.TILE_SIZE)) - yOffScreen);
 
                 Tile tile = world.getTile(x, y).get();
-                Image img = null;
-                if(tile.type.spriteX < 0 || tile.type.spriteY < 0) img = TextureManager.imageMap.get(tile.type.name);
+                Image img;
+                if (tile.type.spriteX < 0 || tile.type.spriteY < 0) img = TextureManager.imageMap.get(tile.type.name);
                 else img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
-                tile.type.renderer.render(img, pixelX, pixelY);
+                tile.type.renderer.render(img, x * Constants.TILE_SIZE + (float) -camX, y * Constants.TILE_SIZE + (float) -camY);
 
                 // Add computer user label to render list if necessary
-                if(tile.type == TileType.COMPUTER) {
-                    String user = ((TileMetadata.ComputerMetadata)tile.metadata).user;
-                    if(user != null) computerLabels.put(new memes.util.Point(pixelX, pixelY), user);
+                if (tile.type == TileType.COMPUTER) {
+                    String user = ((TileMetadata.ComputerMetadata) tile.metadata).user;
+                    if (user != null)
+                        this.computerLabels.put(new memes.util.Point(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE), user);
                 }
-
             }
         }
 
         // Render the computer labels over the tiles
-        computerLabels.entrySet().forEach(pair -> {
+        this.computerLabels.entrySet().forEach(pair -> {
             memes.util.Point p = pair.getKey();
             String str = pair.getValue();
-            float x = (float)p.getX() - (str.length() / 2 * 5), y = (float)p.getY() - Constants.TILE_SIZE / 2;
-            graphics.setColor( new Color(0.17f, 0.17f, 0.19f, 0.9f));
+            float x = (float) p.getX() - (str.length() / 2 * 5), y = (float) p.getY() - Constants.TILE_SIZE / 2;
+            graphics.setColor(new Color(0.17f, 0.17f, 0.19f, 0.9f));
             graphics.fillRect(x - 3, y - 2, graphics.getFont().getWidth(str) + 7, graphics.getFont().getHeight(str) + 5);
             graphics.setColor(Color.white);
             graphics.drawString(str, x, y);
         });
 
-        world.getEntities().forEach(e -> e.render(graphics));
 
+        // gui
         PlayerEntity player = GameClient.INSTANCE.player;
 
         // draw caffeine bar
@@ -95,6 +98,9 @@ public class WorldRenderer {
 
         graphics.setColor(Color.white);
         graphics.drawString("Score: 1010101", 10, 100);
+    }
 
+    public void centreOn(Point point) {
+        playerPos = new Point(point);
     }
 }

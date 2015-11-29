@@ -4,7 +4,6 @@ import memes.game.world.TileType;
 import memes.util.Constants;
 import memes.util.Direction;
 import memes.util.Point;
-import org.newdawn.slick.Graphics;
 
 import java.io.Serializable;
 
@@ -94,11 +93,6 @@ public class HumanEntity extends BaseEntity implements Serializable {
             return;
 
         position.translate(movementDirection, currentMoveSpeed * delta);
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-
     }
 
     public String getUsername() {

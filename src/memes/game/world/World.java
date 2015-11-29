@@ -1,17 +1,14 @@
 package memes.game.world;
 
 import memes.game.entity.BaseEntity;
-import memes.game.entity.HumanEntity;
-import memes.util.GameObject;
 import memes.util.Point;
-import org.newdawn.slick.Graphics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 
-public class World implements GameObject, Serializable {
+public class World implements Serializable {
 
     private Tile[][] tiles;
     private int xSize, ySize;
@@ -96,13 +93,8 @@ public class World implements GameObject, Serializable {
                 .orElseThrow(() -> new IllegalArgumentException("An entity does not exist with the ID " + id));
     }
 
-    @Override
     public void tick(float delta) {
         entities.forEach(e -> e.tick(delta));
-    }
-
-    @Override
-    public void render(Graphics graphics) {
     }
 
     public ArrayList<BaseEntity> getEntities() {

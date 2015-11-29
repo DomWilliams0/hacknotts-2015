@@ -2,6 +2,7 @@ package memes.game.render.anim;
 
 import memes.game.entity.HumanEntity;
 import memes.util.Direction;
+import memes.util.Point;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -51,9 +52,13 @@ public class HumanEntityRenderer {
     }
 
     public void render(Graphics graphics) {
+        render(graphics, humanEntity.getPixelPosition());
+    }
+
+    public void render(Graphics graphics, Point pixelPosition) {
         // player
         Animation anim = getAnimation(humanEntity.getMovementDirection());
-        anim.draw((float) humanEntity.getPixelPosition().getX(), (float) humanEntity.getPixelPosition().getY());
+        anim.draw((float) pixelPosition.getX(), (float) pixelPosition.getY());
 
         // name
         int width = graphics.getFont().getWidth(humanEntity.getUsername());
@@ -61,8 +66,8 @@ public class HumanEntityRenderer {
         final int paddingH = 6;
         final int paddingV = 3;
 
-        float nameX = (float) humanEntity.getPixelPosition().getX() - width / 2 + humanEntity.getAABB().getWidth() / 2;
-        float nameY = (float) humanEntity.getPixelPosition().getY() - height / 2 - humanEntity.getAABB().getHeight() * 0.4f;
+        float nameX = (float) pixelPosition.getX() - width / 2 + humanEntity.getAABB().getWidth() / 2;
+        float nameY = (float) pixelPosition.getY() - height / 2 - humanEntity.getAABB().getHeight() * 0.4f;
 
         graphics.setColor(NAME_BOX_COLOUR);
         graphics.fillRect(nameX - paddingH / 2, nameY - paddingV / 2, width + paddingH, height + paddingV);
@@ -71,12 +76,7 @@ public class HumanEntityRenderer {
         graphics.drawString(humanEntity.getUsername(), nameX, nameY);
     }
 
-
-    public void stop() {
-        playing = false;
-    }
-
-    public void start() {
-        playing = true;
+    public HumanEntity getHumanEntity() {
+        return humanEntity;
     }
 }
