@@ -1,6 +1,7 @@
 package memes.game.world;
 
 import memes.game.entity.BaseEntity;
+import memes.util.Constants;
 import memes.util.Point;
 
 import java.io.Serializable;
@@ -74,13 +75,13 @@ public class World implements Serializable {
     public Point getRandomSpawn(long seed) {
         Random r = new Random(seed);
         Optional<Tile> tile;
-        Point p = Point.EMPTY;
+        Point p;
         do {
             p = new Point(r.nextInt(xSize), r.nextInt(ySize));
             tile = getTile(p.getIntX(), p.getIntY());
         } while (tile.isPresent() && tile.get().type == TileType.FLOOR);
 
-        return p;
+        return p.multiply(Constants.TILE_SIZE);
     }
 
     /**
