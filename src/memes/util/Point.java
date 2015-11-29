@@ -45,6 +45,15 @@ public class Point {
         return this;
     }
 
+    /**
+     * @return This, but mutated
+     */
+    public Point multiply(double scalar) {
+        x *= scalar;
+        y *= scalar;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Point{" +
