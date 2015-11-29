@@ -9,7 +9,8 @@ public enum InputKey {
     LEFT(Input.KEY_A, Direction.WEST),
     RIGHT(Input.KEY_D, Direction.EAST),
     DOWN(Input.KEY_S, Direction.SOUTH),
-    ACTION(Input.KEY_SPACE, null);
+    ACTION(Input.KEY_SPACE),
+    EXIT(Input.KEY_ESCAPE);
 
     private KeyControl control;
     private Direction direction;
@@ -17,6 +18,11 @@ public enum InputKey {
     InputKey(int key, Direction direction) {
         this.control = new KeyControl(key);
         this.direction = direction;
+    }
+
+
+    InputKey(int key) {
+        this(key, null);
     }
 
     public KeyControl getControl() {
