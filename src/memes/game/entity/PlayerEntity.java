@@ -59,8 +59,13 @@ public class PlayerEntity extends HumanEntity implements IEventHandler {
                         for (int bit = currentDirections.nextSetBit(0); bit != -1; bit = currentDirections.nextSetBit(bit + 1))
                             directions[i++] = Direction.values()[bit];
 
-                        Direction d = getMovementDirection().combine(directions);
-                        startMoving(d);
+                        Direction currentDirection = getMovementDirection();
+                        Direction newDirection = currentDirection.combine(directions);
+
+                        if (newDirection == null)
+                            stopMoving();
+                        else
+                            startMoving(newDirection);
                     }
                 }
                 break;
