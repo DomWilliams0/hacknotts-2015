@@ -14,8 +14,9 @@ public class Tile {
 
     static {
         try {
-            sprites = new SpriteSheet(new Image("res/terrain/interior_transparent.png"), Constants.TILE_SIZE, Constants.TILE_SIZE, 1, 0);
-        } catch(SlickException e) {
+            sprites = new SpriteSheet(new Image("res/terrain/interior_transparent.png"),
+                    Constants.TILE_LOAD_SIZE, Constants.TILE_LOAD_SIZE, 1, 0);
+        } catch (SlickException e) {
             e.printStackTrace();
         }
     }

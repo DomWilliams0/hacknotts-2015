@@ -21,13 +21,17 @@ public class WorldRenderer implements Renderer {
         // The world coordinates of the first and last tiles
         int firstTileX = (int) (cameraX - xOffScreen) / Constants.TILE_SIZE;
         int firstTileY = (int) (cameraY - yOffScreen) / Constants.TILE_SIZE;
+
         int lastTileX = Math.min((int) (cameraX + Game.WIDTH + (Constants.TILE_SIZE - (cameraX % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getXSize());
         int lastTileY = Math.min((int) (cameraY + Game.HEIGHT + (Constants.TILE_SIZE - (cameraY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
+
         for (int x = firstTileX; x < lastTileX; x++) {
             // The screen coord that the tile should be rendered too, can be negative
             float pixelX = (float) ((cameraX + ((x - firstTileX) * Constants.TILE_SIZE)) - xOffScreen);
+
             for (int y = firstTileY; y < lastTileY; y++) {
                 float pixelY = (float) ((cameraY + ((y - firstTileY) * Constants.TILE_SIZE)) - yOffScreen);
+
                 Tile tile = world.getTile(x, y).get();
                 tile.type.render(tile.metadata, pixelX, pixelY);
             }
