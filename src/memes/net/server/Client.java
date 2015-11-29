@@ -17,7 +17,7 @@ public class Client extends Thread {
     protected long clientID;
     protected List<PacketHandler> handlers;
 
-    public Client(Socket socket, long clientID, PacketHandler handler) throws IOException {
+    public Client(Socket socket, long clientID) throws IOException {
         super("Client " + clientID);
 
         this.socket = socket;
@@ -25,57 +25,8 @@ public class Client extends Thread {
         this.handlers = new ArrayList<>();
     }
 
-    /**
-     * To be used by the client to connect to the server
-     * @param host
-     * @return
-     * @throws IOException
-     */
-    public static Client connect(String host) throws IOException {
-        Socket socket = new Socket(host, Constants.PORT_NUM);
-        OutputStream os = socket.getOutputStream();
-        DataInputStream dis = new DataInputStream(socket.getInputStream());
-
-        // send client handshake
-        os.write(Constants.HANDSHAKE_CLIENT.getBytes());
-
-        // receive and verify server handshake
-        byte[] reply = new byte[Constants.HANDSHAKE_SERVER.length()];
-        int replyLength = dis.read(reply);
-
-        // didn't receive full handshake
-        if (replyLength != reply.length)
-            throw new IllegalStateException("Did not receive full handshake from server");
-
-        // invalid handshake
-        if (new String(reply).equals(Constants.HANDSHAKE_SERVER))
-            throw new IllegalStateException("Did not receive valid server handshake");
-
-        // receive client id
-        long id = dis.readLong();
-        System.out.println("client's id = " + id);
-
-        // close streams
-        dis.close();
-        os.close();
-
-        Client client = new Client(socket, id , null);
-        client.start();
-        return client;
-    }
-
-    public void addPacketHandler(PacketHandler handler) {
-        handlers.add(handler);
-    }
-
     @Override
     public void run() {
-        try {
-            this.ois = new ObjectInputStream(socket.getInputStream());
-            this.oos = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         while (socket.isConnected()) {
             try {
                 Object o = ois.readObject();
@@ -93,19 +44,85 @@ public class Client extends Thread {
         }
     }
 
-    public boolean handshake() throws IOException {
-        OutputStream os = socket.getOutputStream();
-        InputStream is = socket.getInputStream();
-
-        byte[] reply = new byte[Constants.HANDSHAKE_CLIENT.length()];
-        int bytes = is.read(reply);
-
-        if (bytes != reply.length)
-            return false;
-
-        os.write(Constants.HANDSHAKE_SERVER.getBytes());
-        return true;
+    public void addPacketHandler(PacketHandler handler) {
+        handlers.add(handler);
     }
+
+    /**
+     * To be used by the client to connectToServer to the server
+     *
+     * @param host Server address
+     * @return a Client connected to the Server
+     * @throws IOException
+     */
+    public static Client connectToServer(String host) throws IOException {
+        Socket socket = new Socket(host, Constants.PORT_NUM);
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+
+        // receive and verify server handshake
+        String hs = dis.readUTF();
+
+        // invalid handshake
+        if (!hs.equals(Constants.HANDSHAKE_SERVER))
+            throw new IllegalStateException("Did not receive valid server handshake");
+
+        // send client handshake
+        dos.writeUTF(Constants.HANDSHAKE_CLIENT);
+
+        // receive client id
+        long id = dis.readLong();
+
+        // echo id for verification
+        dos.writeLong(id);
+
+        System.out.println("client's id = " + id);
+
+        Client client = new Client(socket, id);
+        client.start();
+
+        return client;
+    }
+
+    @Override
+    public synchronized void start() {
+        try {
+            ois = new ObjectInputStream(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        super.start();
+    }
+    /**
+     * Called by Server to handshake with a client
+     *
+     * @param clientID id to send to client
+     * @return true if a successful connection
+     * @throws IOException
+     */
+    public boolean handshake(long clientID) throws IOException {
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+
+        // write server handshake
+        dos.writeUTF(Constants.HANDSHAKE_SERVER);
+
+        // read client handshake
+        String hs = dis.readUTF();
+
+        // invalid handshake
+        if (!hs.equals(Constants.HANDSHAKE_CLIENT))
+            throw new IllegalStateException("Did not receive valid client handshake");
+
+        // write client id
+        dos.writeLong(clientID);
+
+        // return false if client doesn't accept id
+        return dis.readLong() == clientID;
+    }
+
     public boolean ping() {
         // TODO: Implement ping-pong pattern
         throw new NotImplementedException();

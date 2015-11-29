@@ -1,5 +1,7 @@
 package memes.net.server;
 
+import memes.game.event.InputEvent;
+import memes.game.input.InputKey;
 import memes.net.PacketHandler;
 import memes.net.packet.Packet;
 import memes.util.Constants;
@@ -27,7 +29,7 @@ public class Server {
     public Server(PacketHandler handler) throws IOException {
         this.handler = handler;
         this.isRunning = true;
-        this.listenThread = new Thread(this::listen);
+        this.listenThread = new Thread(this::listen, "ServerThread");
 
         servSocket = new ServerSocket(Constants.PORT_NUM);
         clientSockets = new ArrayList<>();
@@ -48,14 +50,17 @@ public class Server {
 
                 // TODO: Handle client connection in the
                 // game logic like getting ID and stuff
+                long id = System.nanoTime();
 
                 // TODO: Use actual client id
-                Client cs = new Client(accept, 123, handler);
-                if (!cs.handshake()) {
+                Client cs = new Client(accept, id);
+                if (!cs.handshake(id)) {
                     cs.sendText("You are not a real client. Do one!");
                     cs.disconnect();
                     continue;
                 }
+
+                System.out.println("Client " + cs.getID() + " is connected");
 
                 clientSockets.add(cs);
                 clientMap.put(cs.getID(), cs);
@@ -87,5 +92,20 @@ public class Server {
     private void sendAll(Packet packet) {
         // TODO: Send packet to all
         throw new NotImplementedException();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        try {
+            Server server = new Server(System.out::println);
+            server.start();
+
+            Client c1 = Client.connectToServer("localhost");
+            c1.addPacketHandler(System.out::println);
+
+            server.send(new InputEvent(InputKey.ACTION, true), c1.getID());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
