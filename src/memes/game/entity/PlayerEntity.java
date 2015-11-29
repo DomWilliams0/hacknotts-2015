@@ -76,7 +76,7 @@ public class PlayerEntity extends HumanEntity implements IEventHandler {
             }
             case Action:
                 ActionEvent event = (ActionEvent) e;
-                event.tile.type.onAction.onAction(event.tile, event.player);
+                event.tile.type.onAction.onAction(event.tile, event.player, false);
                 break;
         }
     }
