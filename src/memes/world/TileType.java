@@ -3,6 +3,7 @@ package memes.world;
 import memes.game.entity.PlayerEntity;
 import memes.render.TileRenderer;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 public enum TileType {
     FLOOR(
@@ -21,7 +22,6 @@ public enum TileType {
                 meta.developmentProgress++;
                 System.out.printf("%s dev for tile is now %d%n", player.toString(), meta.developmentProgress);
             },
-            18, 0
     );
 
     // This defines how the tile type's metadata is constructed
@@ -39,6 +39,15 @@ public enum TileType {
 
     TileType(TileMetadata.MetadataFactory factory, TileActionListener onAction, int spriteX, int spriteY) {
         this(factory, TileRenderer.standardRenderer, onAction, spriteX, spriteY);
+    }
+
+    TileType(TileMetadata.MetadataFactory factory, TileActionListener onAction) {
+        this(factory, TileRenderer.standardRenderer, onAction, 0, 0);
+        try {
+            img = new Image("res/terrain/" + this.name().toLowerCase() + ".png");
+        } catch(SlickException e) {
+            e.printStackTrace();
+        }
     }
 
     TileType(TileMetadata.MetadataFactory factory, int spriteX, int spriteY) {

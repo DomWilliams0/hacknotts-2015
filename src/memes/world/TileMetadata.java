@@ -26,6 +26,7 @@ public abstract class TileMetadata {
     public static class ComputerMetadata extends TileMetadata {
 
         public int developmentProgress = 0;
+        public String user;
 
         public ComputerMetadata(int x, int y, World world) {
 
