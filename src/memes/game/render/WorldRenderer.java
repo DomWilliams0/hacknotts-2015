@@ -1,10 +1,16 @@
 package memes.game.render;
 
+import javafx.util.Pair;
 import memes.game.world.Tile;
+import memes.game.world.TileMetadata;
+import memes.game.world.TileType;
 import memes.game.world.World;
 import memes.util.Constants;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+
+import java.util.ArrayList;
 
 public class WorldRenderer {
 
@@ -27,7 +33,7 @@ public class WorldRenderer {
 
         int lastTileY = Math.min((int) (cameraY + Constants.WINDOW_SIZE.getIntY() +
                 (Constants.TILE_SIZE - (cameraY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
-
+        ArrayList<Pair<memes.util.Point, String>> computerLabels = new ArrayList<>();
         for (int x = firstTileX; x < lastTileX; x++) {
             // The screen coord that the tile should be rendered too, can be negative
             float pixelX = (float) ((cameraX + ((x - firstTileX) * Constants.TILE_SIZE)) - xOffScreen);
@@ -40,8 +46,25 @@ public class WorldRenderer {
                 if(tile.type.spriteX < 0 || tile.type.spriteY < 0) img = TextureManager.imageMap.get(tile.type.name);
                 else img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
                 tile.type.renderer.render(img, pixelX, pixelY);
+
+                if(tile.type == TileType.COMPUTER) {
+                    String user = ((TileMetadata.ComputerMetadata)tile.metadata).user;
+                    if(user != null) computerLabels.add(new Pair<memes.util.Point, String>(new memes.util.Point(pixelX, pixelY), user));
+                }
+
             }
         }
+
+        // Render the computer labels over the tiles
+        computerLabels.forEach(pair -> {
+            memes.util.Point p = pair.getKey();
+            String str = pair.getValue();
+            float x = (float)p.getX() - (str.length() / 2 * 5), y = (float)p.getY() - Constants.TILE_SIZE / 2;
+            graphics.setColor( new Color(0.17f, 0.17f, 0.19f, 0.9f));
+            graphics.fillRect(x - 3, y - 2, graphics.getFont().getWidth(str) + 7, graphics.getFont().getHeight(str) + 5);
+            graphics.setColor(Color.white);
+            graphics.drawString(str, x, y);
+        });
 
         world.getEntities().forEach(e -> e.render(graphics));
     }
