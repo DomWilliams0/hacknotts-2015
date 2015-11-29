@@ -15,6 +15,8 @@ public class HumanAnimation {
 
     private Map<Direction, Animation> anims;
 
+    private boolean playing, wasPlaying;
+
     public HumanAnimation(String animationNickname) {
 
         Animation[] animations = Animations.createAnimations(animationNickname, TEMP_ANIM_STEP);
@@ -26,6 +28,8 @@ public class HumanAnimation {
         anims.put(Direction.WEST, animations[1]);
         anims.put(Direction.EAST, animations[2]);
         anims.put(Direction.NORTH, animations[3]);
+
+        playing = wasPlaying = false;
     }
 
     public Animation getAnimation(Direction direction) {
@@ -33,6 +37,23 @@ public class HumanAnimation {
         if (anim == null)
             throw new IllegalArgumentException("Direction must be N, E, S or W");
 
+        if (playing != wasPlaying) {
+            if (playing)
+                anim.start();
+            else anim.stop();
+
+            anim.setCurrentFrame(0);
+            wasPlaying = playing;
+        }
+
         return anim;
+    }
+
+    public void stop() {
+        playing = false;
+    }
+
+    public void start() {
+        playing = true;
     }
 }

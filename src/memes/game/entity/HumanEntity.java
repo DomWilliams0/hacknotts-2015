@@ -2,6 +2,7 @@ package memes.game.entity;
 
 import memes.game.anim.HumanAnimation;
 import memes.util.Constants;
+import memes.util.Direction;
 import memes.util.Point;
 import org.newdawn.slick.Animation;
 
@@ -19,6 +20,18 @@ public class HumanEntity extends BaseEntity {
     @Override
     public void tick(float delta) {
         move(delta);
+    }
+
+    @Override
+    public void startMoving(Direction direction, int speed) {
+        super.startMoving(direction, speed);
+        animation.start();
+    }
+
+    @Override
+    public void stopMoving() {
+        super.stopMoving();
+        animation.stop();
     }
 
     private void move(float delta) {
