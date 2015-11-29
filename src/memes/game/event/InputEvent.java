@@ -11,16 +11,16 @@ public class InputEvent implements Packet, Serializable {
 
     private InputKey key;
     private boolean pressed;
-    private PlayerEntity player;
+    private long playerID;
 
-    public InputEvent(InputKey key, boolean pressed, PlayerEntity player) {
+    public InputEvent(InputKey key, boolean pressed, long playerID) {
         this.key = key;
         this.pressed = pressed;
-        this.player = player;
+        this.playerID = playerID;
     }
 
-    public PlayerEntity getPlayer() {
-        return player;
+    public long getPlayerID() {
+        return playerID;
     }
 
     public InputKey getKey() {

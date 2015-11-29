@@ -17,7 +17,8 @@ import javax.swing.*;
 
 public class Game extends BasicGame {
 
-    private World world;
+    public World world;
+    public static Game INSTANCE;
 
     public Game() {
         // ALERT! Do not do any game initialisation in here, use init(GameContainer) instead (so that OpenGL is already initialised etc.)
@@ -122,6 +123,6 @@ public class Game extends BasicGame {
     }
 
     public static void main(String[] args) {
-        new Game();
+        INSTANCE = new Game();
     }
 }
