@@ -42,7 +42,7 @@ public class HumanEntity extends BaseEntity {
         if (!isMoving())
             return;
 
-        position = movementDirection.translate(position, currentMoveSpeed * delta);
+        position.translate(movementDirection, currentMoveSpeed * delta);
     }
 
     @Override

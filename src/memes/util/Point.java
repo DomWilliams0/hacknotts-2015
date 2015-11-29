@@ -1,6 +1,11 @@
 package memes.util;
 
+import org.omg.CORBA.portable.IndirectionException;
+
 public class Point {
+
+    public static final Point EMPTY = new Point(0, 0);
+
     private double x, y;
 
     public Point(double x, double y) {
@@ -40,6 +45,14 @@ public class Point {
     /**
      * @return This, but mutated
      */
+    public Point translate(Direction d, float distance) {
+        this.add(d.toPoint().multiply(distance));
+        return this;
+    }
+
+    /**
+     * @return This, but mutated
+     */
     public Point add(Point p) {
         translate(p.x, p.y);
         return this;
@@ -52,6 +65,28 @@ public class Point {
         x *= scalar;
         y *= scalar;
         return this;
+    }
+
+    public Direction toDirection() {
+        if (x != 0)
+            switch ((int) Math.signum(x)) {
+                case -1:
+                    return Direction.WEST;
+                case 1:
+                    return Direction.EAST;
+                default:
+                    return null;
+            }
+        else if (y != 0)
+            switch ((int) Math.signum(y)) {
+                case -1:
+                    return Direction.NORTH;
+                case 1:
+                    return Direction.SOUTH;
+                default:
+                    return null;
+            }
+        return null;
     }
 
     @Override
@@ -69,8 +104,7 @@ public class Point {
 
         Point point = (Point) o;
 
-        if (Double.compare(point.x, x) != 0) return false;
-        return Double.compare(point.y, y) == 0;
+        return Double.compare(point.x, x) == 0 && Double.compare(point.y, y) == 0;
 
     }
 

@@ -1,5 +1,8 @@
 package memes.util;
 
+import java.util.Arrays;
+import java.util.function.BinaryOperator;
+
 public enum Direction {
 
     NORTH,
@@ -15,51 +18,35 @@ public enum Direction {
         return ordinal();
     }
 
-    public Point translate(Point from, float amount) {
-        float dx = 0, dy = 0;
+    public Point toPoint() {
         switch (this) {
             case NORTH:
-                dy = -1;
-                break;
+                return new Point(0, -1);
             case NORTH_EAST:
-                dx = 1;
-                dy = -1;
-                break;
+                return new Point(1, -1);
             case EAST:
-                dx = 1;
-                break;
+                return new Point(1, 0);
             case SOUTH_EAST:
-                dx = 1;
-                dy = 1;
-                break;
+                return new Point(1, 1);
             case SOUTH:
-                dy = 1;
-                break;
+                return new Point(0, 1);
             case SOUTH_WEST:
-                dx = -1;
-                dy = 1;
-                break;
+                return new Point(-1, 1);
             case WEST:
-                dx = -1;
-                break;
+                return new Point(-1, 0);
             case NORTH_WEST:
-                dx = -1;
-                dy = -1;
-                break;
+                return new Point(-1, -1);
+            default:
+                return Point.EMPTY;
         }
-
-        dx *= amount;
-        dy *= amount;
-
-        Point ret = new Point(from);
-        ret.translate(dx, dy);
-        return ret;
     }
 
-
     public Direction combine(Direction... direction) {
-        // todo fuck me
-        return this;
+        return Arrays.stream(direction)
+                .map(Direction::toPoint)
+                .reduce(Point::add)
+                .orElse(Point.EMPTY)
+                .toDirection();
     }
 
     public Direction toRightAngle() {
