@@ -1,45 +1,29 @@
 package memes.game.input;
 
+import memes.game.event.EventHandler;
+import memes.game.event.IEventHandler;
+import memes.game.event.InputEvent;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 
-import java.util.BitSet;
-
 public class InputHandler implements InputProviderListener {
 
-    private static InputHandler INSTANCE = new InputHandler();
+    private EventHandler<InputEvent> eventHandler;
 
-    private BitSet pressed, wasPressed;
+    public InputHandler(GameContainer game) {
+        eventHandler = new EventHandler<>();
 
-    private InputHandler() {
-    }
-
-    public static void init(GameContainer game) {
         InputProvider provider = new InputProvider(game.getInput());
-        provider.addListener(INSTANCE);
+        provider.addListener(this);
 
         for (InputKey key : InputKey.values())
             provider.bindCommand(key.getControl(), new MemeCommand(key));
-
-        INSTANCE.pressed = new BitSet(InputKey.values().length);
-        INSTANCE.wasPressed = new BitSet(InputKey.values().length);
-
     }
 
-    // TODO: replace with startMoving/endMoving
-
-    public static boolean isPressed(InputKey key) {
-        return INSTANCE.pressed.get(key.ordinal());
-    }
-
-    public static boolean isFirstPressed(InputKey key) {
-        return isPressed(key) && !INSTANCE.wasPressed.get(key.ordinal());
-    }
-
-    public static boolean isHeld(InputKey key) {
-        return isPressed(key) && INSTANCE.wasPressed.get(key.ordinal());
+    public void addHandler(IEventHandler<InputEvent> handler) {
+        eventHandler.addHandler(handler);
     }
 
     @Override
@@ -53,9 +37,8 @@ public class InputHandler implements InputProviderListener {
     }
 
     private void update(Command command, boolean nowPressed) {
-        int key = ((MemeCommand) command).getKey().ordinal();
-        wasPressed.set(key, pressed.get(key));
-        pressed.set(key, nowPressed);
+        InputKey key = ((MemeCommand) command).getKey();
+        eventHandler.callHandlers(new InputEvent(key, nowPressed));
     }
 
     private static class MemeCommand implements Command {
