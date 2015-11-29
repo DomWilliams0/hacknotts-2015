@@ -80,7 +80,7 @@ public class PlayerEntity extends HumanEntity implements IEventHandler<Packet> {
                         startMoving(d);
                     }
                 } else if(key == InputKey.ACTION) {
-
+                    
                 }
                 break;
             }

@@ -16,7 +16,11 @@ public enum TileType {
             // Metadata factory
             (x, y, world) -> new TileMetadata.ComputerMetadata(x, y, world),
             // onAction
-            (tile, player) -> System.out.printf("%s just used a computer%n", player.toString()),
+            (tile, player) -> {
+                TileMetadata.ComputerMetadata meta = (TileMetadata.ComputerMetadata) tile.metadata;
+                meta.developmentProgress++;
+                System.out.printf("%s dev for tile is now %d%n", player.toString(), meta.developmentProgress);
+            },
             18, 0
     );
 
