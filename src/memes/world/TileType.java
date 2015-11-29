@@ -1,6 +1,5 @@
 package memes.world;
 
-import memes.game.entity.PlayerEntity;
 import memes.render.TileRenderer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -8,20 +7,20 @@ import org.newdawn.slick.SlickException;
 public enum TileType {
     FLOOR(
             // Metadata factory
-            (x, y, world) -> new TileMetadata.FloorMetadata(x, y, world),
+            TileMetadata.FloorMetadata::new,
             25, 0
     ),
     DESK(6, 5),
     WALL(23, 13),
     COMPUTER(
             // Metadata factory
-            (x, y, world) -> new TileMetadata.ComputerMetadata(x, y, world),
+            TileMetadata.ComputerMetadata::new,
             // onAction
             (tile, player) -> {
                 TileMetadata.ComputerMetadata meta = (TileMetadata.ComputerMetadata) tile.metadata;
                 meta.developmentProgress++;
                 System.out.printf("%s dev for tile is now %d%n", player.toString(), meta.developmentProgress);
-            },
+            }
     );
 
     // This defines how the tile type's metadata is constructed
@@ -45,13 +44,14 @@ public enum TileType {
         this(factory, TileRenderer.standardRenderer, onAction, 0, 0);
         try {
             img = new Image("res/terrain/" + this.name().toLowerCase() + ".png");
-        } catch(SlickException e) {
+        } catch (SlickException e) {
             e.printStackTrace();
         }
     }
 
     TileType(TileMetadata.MetadataFactory factory, int spriteX, int spriteY) {
-        this(factory, TileRenderer.standardRenderer, (tile, world) -> {}, spriteX, spriteY);
+        this(factory, TileRenderer.standardRenderer, (tile, world) -> {
+        }, spriteX, spriteY);
     }
 
     TileType(int spriteX, int spriteY) {
