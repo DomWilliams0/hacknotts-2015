@@ -1,6 +1,5 @@
 package memes.game.render;
 
-import javafx.util.Pair;
 import memes.GameClient;
 import memes.game.entity.PlayerEntity;
 import memes.game.world.Tile;
@@ -8,12 +7,13 @@ import memes.game.world.TileMetadata;
 import memes.game.world.TileType;
 import memes.game.world.World;
 import memes.util.Constants;
+import memes.util.Point;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class WorldRenderer {
 
@@ -37,7 +37,7 @@ public class WorldRenderer {
         int lastTileY = Math.min((int) (cameraY + Constants.WINDOW_SIZE.getIntY() +
                 (Constants.TILE_SIZE - (cameraY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
 
-        ArrayList<Pair<memes.util.Point, String>> computerLabels = new ArrayList<>();
+        Map<Point, String> computerLabels = new TreeMap<>();
         for (int x = firstTileX; x < lastTileX; x++) {
             // The screen coord that the tile should be rendered too, can be negative
             float pixelX = (float) ((cameraX + ((x - firstTileX) * Constants.TILE_SIZE)) - xOffScreen);
@@ -54,14 +54,14 @@ public class WorldRenderer {
                 // Add computer user label to render list if necessary
                 if(tile.type == TileType.COMPUTER) {
                     String user = ((TileMetadata.ComputerMetadata)tile.metadata).user;
-                    if(user != null) computerLabels.add(new Pair<memes.util.Point, String>(new memes.util.Point(pixelX, pixelY), user));
+                    if(user != null) computerLabels.put(new memes.util.Point(pixelX, pixelY), user);
                 }
 
             }
         }
 
         // Render the computer labels over the tiles
-        computerLabels.forEach(pair -> {
+        computerLabels.entrySet().forEach(pair -> {
             memes.util.Point p = pair.getKey();
             String str = pair.getValue();
             float x = (float)p.getX() - (str.length() / 2 * 5), y = (float)p.getY() - Constants.TILE_SIZE / 2;

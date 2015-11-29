@@ -21,7 +21,6 @@ import memes.net.packet.WorldPacket;
 import memes.net.server.GameServer;
 import memes.net.server.NetClient;
 import memes.util.Constants;
-import memes.util.Point;
 import org.newdawn.slick.*;
 
 import javax.swing.*;
@@ -157,7 +156,7 @@ public class GameClient extends BasicGame implements IEventHandler {
             // moi
             if (cp.getID() == client.getID()) return;
 
-            PlayerEntity newPlayer = new PlayerEntity(cp.getID(), cp.getUsername(), new Point(64, 64));
+            PlayerEntity newPlayer = new PlayerEntity(cp.getID(), cp.getUsername(), world.getRandomSpawn(cp.getID()));
             newPlayer.addHandler(client);
             world.addEntity(newPlayer);
             humanRenderers.add(new HumanEntityRenderer(newPlayer));
