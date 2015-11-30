@@ -83,21 +83,30 @@ public class NetServer {
         }
     }
 
-    public void broadcast(Packet packet) throws IOException {
+    public void broadcast(Packet packet) {
+        // TODO: Add to send queue
         send(packet, -1);
     }
 
-    public void send(Packet packet, long clientID) throws IOException {
-        if (clientID < 0) {
-            sendAll(packet);
-            return;
+    public void send(Packet packet, long clientID) {
+        try {
+            if (clientID < 0) {
+                sendAll(packet);
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         NetClient cs = clientMap.get(clientID);
         if (cs == null)
             throw new IllegalArgumentException("Client doesn't exist. Wtf");
 
-        cs.sendPacket(packet);
+        try {
+            cs.sendPacket(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendAll(Packet packet) throws IOException {

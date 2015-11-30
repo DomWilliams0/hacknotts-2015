@@ -18,30 +18,37 @@ import java.util.TreeMap;
 public class WorldRenderer {
 
     private World world;
-    private Point playerPos;
+    private Point camPos;
     private Map<Point, String> computerLabels;
 
     public WorldRenderer(World world) {
         this.world = world;
-        this.playerPos = Point.EMPTY;
         computerLabels = new TreeMap<>();
     }
 
+    public Point getCamPos() {
+        return camPos;
+    }
+    public void setCamPos(Point camPos) {
+        this.camPos = camPos;
+    }
+    /**
+     * Render the world centred on x and y
+     * @param graphics graphics to render to
+     * @param x the x component of the point to centre camera at
+     * @param x the y component of the point to centre camera at
+     */
     public void render(Graphics graphics) {
+        double xOffScreen = camPos.getX() % Constants.TILE_SIZE;
+        double yOffScreen = camPos.getY() % Constants.TILE_SIZE;
 
-        double camX = playerPos.getX() - (Constants.WINDOW_SIZE.getX() / 2);
-        double camY = playerPos.getY() - (Constants.WINDOW_SIZE.getY() / 2);
+        int firstTileX = Math.max(0, Math.min(world.getXSize(), (int) (camPos.getX() - xOffScreen) / Constants.TILE_SIZE));
+        int firstTileY = Math.max(0, Math.min(world.getYSize(), (int) (camPos.getY() - yOffScreen) / Constants.TILE_SIZE));
 
-        double xOffScreen = camX % Constants.TILE_SIZE;
-        double yOffScreen = camY % Constants.TILE_SIZE;
-
-        int firstTileX = Math.max(0, Math.min(world.getXSize(), (int) (camX - xOffScreen) / Constants.TILE_SIZE));
-        int firstTileY = Math.max(0, Math.min(world.getYSize(), (int) (camY - yOffScreen) / Constants.TILE_SIZE));
-
-        int lastTileX = Math.min((int) (camX + Constants.WINDOW_SIZE.getIntX() +
-                (Constants.TILE_SIZE - (camX % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getXSize());
-        int lastTileY = Math.min((int) (camY + Constants.WINDOW_SIZE.getIntY() +
-                (Constants.TILE_SIZE - (camY % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
+        int lastTileX = Math.min((int) (camPos.getX() + Constants.WINDOW_SIZE.getIntX() +
+                (Constants.TILE_SIZE - (camPos.getX() % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getXSize());
+        int lastTileY = Math.min((int) (camPos.getY() + Constants.WINDOW_SIZE.getIntY() +
+                (Constants.TILE_SIZE - (camPos.getY() % Constants.TILE_SIZE))) / Constants.TILE_SIZE, world.getYSize());
 
         computerLabels.clear();
 
@@ -52,20 +59,20 @@ public class WorldRenderer {
                 Image img;
                 if (tile.type.spriteX < 0 || tile.type.spriteY < 0) img = TextureManager.imageMap.get(tile.type.name);
                 else img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
-                tile.type.renderer.render(img, x * Constants.TILE_SIZE + (float) -camX, y * Constants.TILE_SIZE + (float) -camY);
+                tile.type.renderer.render(img, x * Constants.TILE_SIZE + (float) -camPos.getX(), y * Constants.TILE_SIZE + (float) -camPos.getY());
 
                 // Add computer user label to render list if necessary
                 if (tile.type == TileType.COMPUTER) {
                     String user = ((TileMetadata.ComputerMetadata) tile.metadata).user;
                     if (user != null)
-                        this.computerLabels.put(new memes.util.Point(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE), user);
+                        this.computerLabels.put(new Point(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE), user);
                 }
             }
         }
 
         // Render the computer labels over the tiles
         this.computerLabels.entrySet().forEach(pair -> {
-            memes.util.Point p = pair.getKey();
+            Point p = pair.getKey();
             String str = pair.getValue();
             float x = (float) p.getX() - (str.length() / 2 * 5), y = (float) p.getY() - Constants.TILE_SIZE / 2;
             graphics.setColor(new Color(0.17f, 0.17f, 0.19f, 0.9f));

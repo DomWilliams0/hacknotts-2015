@@ -6,9 +6,10 @@ import memes.game.event.IEventHandler;
 import memes.game.event.MoveEvent;
 import memes.game.world.World;
 import memes.game.world.gen.FileOfficeGenerator;
+import memes.net.packet.ConnectRequest;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
-import memes.net.packet.PlayerConnectPacket;
+import memes.net.packet.ConnectPacket;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class GameServer implements IEventHandler {
     public void onPacketReceive(Packet packet) {
         // new player joins
         if (packet.getPacketType() == PacketType.Connect) {
-            PlayerConnectPacket cp = (PlayerConnectPacket) packet;
+            ConnectRequest cp = (ConnectRequest) packet;
+            PlayerEntity player = world.playerConnected(cp.getID(), cp.getUsername());
         }
 
         // movement

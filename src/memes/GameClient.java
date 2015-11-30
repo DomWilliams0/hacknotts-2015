@@ -14,14 +14,16 @@ import memes.game.render.WorldRenderer;
 import memes.game.render.anim.Animations;
 import memes.game.render.anim.HumanEntityRenderer;
 import memes.game.world.World;
+import memes.net.packet.ConnectPacket;
 import memes.net.packet.Packet;
 import memes.net.packet.PacketType;
-import memes.net.packet.PlayerConnectPacket;
 import memes.net.packet.WorldPacket;
 import memes.net.server.GameServer;
 import memes.net.server.NetClient;
 import memes.util.Constants;
+import memes.util.Point;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Shape;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -142,12 +144,12 @@ public class GameClient extends BasicGame implements IEventHandler {
 
         // a player joined
         else if (packet.getPacketType() == PacketType.Connect) {
-            PlayerConnectPacket cp = (PlayerConnectPacket) packet;
+            ConnectPacket cp = (ConnectPacket) packet;
 
             // moi
-            if (cp.getID() == client.getID()) return;
+            if (cp.getPlayer().getID() == client.getID()) return;
 
-            PlayerEntity newPlayer = new PlayerEntity(cp.getID(), cp.getUsername(), world.getRandomSpawn(cp.getID()));
+            PlayerEntity newPlayer = cp.getPlayer();
             newPlayer.addHandler(client);
             world.addEntity(newPlayer);
             humanRenderers.add(new HumanEntityRenderer(newPlayer));

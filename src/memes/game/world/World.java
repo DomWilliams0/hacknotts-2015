@@ -1,6 +1,7 @@
 package memes.game.world;
 
 import memes.game.entity.BaseEntity;
+import memes.game.entity.PlayerEntity;
 import memes.util.Constants;
 import memes.util.Point;
 

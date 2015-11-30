@@ -3,8 +3,9 @@ package memes.net.server;
 import memes.game.entity.PlayerEntity;
 import memes.game.event.IEventHandler;
 import memes.game.world.World;
+import memes.net.packet.ConnectRequest;
 import memes.net.packet.Packet;
-import memes.net.packet.PlayerConnectPacket;
+import memes.net.packet.ConnectPacket;
 import memes.net.packet.WorldPacket;
 import memes.util.Constants;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -57,17 +58,17 @@ public class NetClient extends Thread implements IEventHandler {
 
                     lastPacketTime = packet.getSendTime();
 
-
-
-
-                    if (packet instanceof PlayerConnectPacket) {
-                        PlayerConnectPacket connPacket = (PlayerConnectPacket) packet;
+                    if (packet instanceof ConnectRequest) {
+                        ConnectRequest connPacket = (ConnectRequest) packet;
 
                         World world = GameServer.INSTANCE.getWorld();
                         PlayerEntity player = new PlayerEntity(
                                 connPacket.getID(),
                                 connPacket.getUsername(),
-                                world.getRandomSpawn(connPacket.getID()));
+                                world.getSpawnTile(connPacket.getID())
+                                        .multiply(Constants.TILE_SIZE)
+                                        .add(Constants.TILE_SIZE / 2)
+                        );
 
                         world.addEntity(player);
 
@@ -144,7 +145,7 @@ public class NetClient extends Thread implements IEventHandler {
     public void requestServerWorld(long clientID, String playerName) throws Exception {
         this.start();
 
-        PlayerConnectPacket connPacket = new PlayerConnectPacket(clientID, playerName);
+        ConnectRequest connPacket = new ConnectRequest(clientID, playerName);
         sendPacket(connPacket);
     }
 

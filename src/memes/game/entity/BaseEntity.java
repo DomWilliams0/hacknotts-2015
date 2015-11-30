@@ -14,7 +14,7 @@ public abstract class BaseEntity implements Serializable {
     private static long LASTID = 0;
 
     private long id;
-    protected Shape aabb;
+    protected final Shape aabb;
 
     /**
      * Pixel position
@@ -110,7 +110,12 @@ public abstract class BaseEntity implements Serializable {
         this.position = position;
     }
 
-    public Shape getAABB() {
+    public void setPositionToTile(Point tilePos) {
+        this.position = new Point(tilePos).multiply(Constants.TILE_SIZE)
+                .add((float) Constants.SPRITESHEET_HUMAN_SIZE / 2);
+    }
+
+    public Shape getBoundingBox() {
         return aabb;
     }
 }
