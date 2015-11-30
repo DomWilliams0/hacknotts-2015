@@ -1,13 +1,14 @@
 package memes.net.packet;
 
+import memes.util.Point;
+
 import java.io.Serializable;
 
-public class PlayerConnectPacket implements Packet, Serializable {
+public class ConnectRequest extends Packet implements Serializable {
     private String username;
     private long entityID;
-    private long sendTime;
 
-    public PlayerConnectPacket(long entityID, String username) {
+    public ConnectRequest(long entityID, String username) {
         this.username = username;
         this.entityID = entityID;
     }
@@ -22,16 +23,6 @@ public class PlayerConnectPacket implements Packet, Serializable {
 
     @Override
     public PacketType getPacketType() {
-        return PacketType.Connect;
-    }
-
-    @Override
-    public long getSendTime() {
-        return sendTime;
-    }
-
-    @Override
-    public void setSendTime(long time) {
-        sendTime = time;
+        return PacketType.ConnectReq;
     }
 }

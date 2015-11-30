@@ -1,13 +1,18 @@
 package memes.net.packet;
 
-public interface Packet {
+public abstract class Packet {
+    private long sendTime;
+
     /**
      * Gets the Type of the Packet, useful for casting
      * @return type of the packet
      */
-    PacketType getPacketType();
+    public abstract PacketType getPacketType();
 
-    long getSendTime();
-
-    void setSendTime(long time);
+    public long getSendTime() {
+        return sendTime;
+    }
+    public void setSendTime(long time) {
+        sendTime = time;
+    }
 }

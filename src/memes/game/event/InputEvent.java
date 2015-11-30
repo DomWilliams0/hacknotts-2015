@@ -6,9 +6,7 @@ import memes.net.packet.PacketType;
 
 import java.io.Serializable;
 
-public class InputEvent implements Packet, Serializable {
-
-    private long sendTime;
+public class InputEvent extends Packet implements Serializable {
     private InputKey key;
     private boolean pressed;
 
@@ -36,15 +34,5 @@ public class InputEvent implements Packet, Serializable {
                 "key=" + key +
                 ", pressed=" + pressed +
                 '}';
-    }
-
-    @Override
-    public long getSendTime() {
-        return sendTime;
-    }
-
-    @Override
-    public void setSendTime(long time) {
-        sendTime = time;
     }
 }

@@ -7,12 +7,10 @@ import memes.game.world.Tile;
 
 import java.io.Serializable;
 
-public class ActionEvent implements Packet, Serializable {
-
+public class ActionEvent extends Packet implements Serializable {
     public PlayerEntity player;
     public Tile tile;
     public boolean flag;
-    private long sendTime;
 
     public ActionEvent(PlayerEntity player, Tile tile, boolean flag) {
         this.player = player;
@@ -24,15 +22,4 @@ public class ActionEvent implements Packet, Serializable {
     public PacketType getPacketType() {
         return PacketType.Action;
     }
-
-    @Override
-    public long getSendTime() {
-        return sendTime;
-    }
-
-    @Override
-    public void setSendTime(long time) {
-        sendTime = time;
-    }
-
 }
