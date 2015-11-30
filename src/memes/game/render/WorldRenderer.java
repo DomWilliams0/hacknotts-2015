@@ -98,6 +98,8 @@ public class WorldRenderer {
 
         graphics.setColor(Color.white);
         graphics.drawString("Score: 1010101", 10, 100);
+
+        graphics.translate((float) -camX, (float) -camY);
     }
 
     public void centreOn(Point point) {

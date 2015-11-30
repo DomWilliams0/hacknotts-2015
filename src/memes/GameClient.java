@@ -21,7 +21,6 @@ import memes.net.packet.WorldPacket;
 import memes.net.server.GameServer;
 import memes.net.server.NetClient;
 import memes.util.Constants;
-import memes.util.Point;
 import org.newdawn.slick.*;
 
 import javax.swing.*;
@@ -224,13 +223,8 @@ public class GameClient extends BasicGame implements IEventHandler {
         }
 
         humanRenderers.forEach(e -> {
-            if (!(e.getHumanEntity() instanceof PlayerEntity) || e.getHumanEntity() != player)
+
                 e.render(graphics);
-            else {
-                Point point = new Point(Constants.WINDOW_SIZE.getX() / 2 - e.getHumanEntity().getAABB().getWidth() / 2,
-                        Constants.WINDOW_SIZE.getY() / 2 - e.getHumanEntity().getAABB().getHeight() / 2);
-                e.render(graphics, point);
-            }
         });
 
     }
