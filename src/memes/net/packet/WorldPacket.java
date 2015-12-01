@@ -18,4 +18,12 @@ public class WorldPacket extends Packet implements Serializable {
     public PacketType getPacketType() {
         return PacketType.World;
     }
+
+    @Override
+    public String toString() {
+        return "WorldPacket{" +
+                "world=" + world +
+                ", serverID=" + serverID +
+                "} " + super.toString();
+    }
 }

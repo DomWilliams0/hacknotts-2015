@@ -57,6 +57,6 @@ public class MoveEvent extends Packet implements Serializable {
                 ", speed=" + speed +
                 ", direction=" + direction +
                 ", isMoveStart=" + isMoveStart +
-                '}';
+                "} " + super.toString();
     }
 }
