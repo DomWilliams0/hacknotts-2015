@@ -6,13 +6,18 @@ import java.io.Serializable;
 
 public class WorldPacket extends Packet implements Serializable {
     private World world;
+    private long serverID;
 
-    public WorldPacket(World world) {
+    public WorldPacket(World world, long serverID) {
         this.world = world;
+        this.serverID = serverID;
     }
 
     public World getWorld() {
         return world;
+    }
+    public long getServerID() {
+        return serverID;
     }
     @Override
     public PacketType getPacketType() {

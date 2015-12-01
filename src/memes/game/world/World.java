@@ -12,6 +12,8 @@ import java.util.Random;
 
 public class World implements Serializable {
 
+    // TODO: Split into ServerWorld and World for the Client
+
     private Tile[][] tiles;
     private int xSize, ySize;
     private ArrayList<BaseEntity> entities;
@@ -54,6 +56,18 @@ public class World implements Serializable {
         e.setWorld(this);
     }
 
+    /**
+     * Used by Server to add connected player to world
+     * @param id player id
+     * @param username player username
+     * @return the PlayerEntity object
+     */
+    public PlayerEntity playerConnected(long id, String username) {
+        PlayerEntity player = new PlayerEntity(id, username, getSpawnTile(id).multiply(Constants.TILE_SIZE));
+        addEntity(player);
+        return player;
+    }
+
     public int getXSize() {
         return xSize;
     }
@@ -73,16 +87,17 @@ public class World implements Serializable {
         return x < xSize && y < ySize && x >= 0 && y >= 0 ? Optional.of(tiles[x][y]) : Optional.<Tile>empty();
     }
 
-    public Point getRandomSpawn(long seed) {
-        Random r = new Random(seed);
+    public Point getSpawnTile(long seed) {
+        return new Point(17, 7);
+        /*Random r = new Random(seed);
         Optional<Tile> tile;
         Point p;
         do {
             p = new Point(r.nextInt(xSize), r.nextInt(ySize));
             tile = getTile(p.getIntX(), p.getIntY());
-        } while (tile.isPresent() && tile.get().type == TileType.FLOOR);
+        } while (tile.get().type != TileType.FLOOR);
 
-        return p.multiply(Constants.TILE_SIZE);
+        return p.multiply(Constants.TILE_SIZE);*/
     }
 
     /**

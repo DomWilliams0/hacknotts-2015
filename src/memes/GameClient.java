@@ -97,10 +97,12 @@ public class GameClient extends BasicGame implements IEventHandler {
 
         try {
             client = NetClient.connectToServer(serverHost);
-            client.addPacketHandler(this);
+            client.setPacketHandler(this);
             client.requestServerWorld(client.getID(), username);
         } catch (Exception e) {
+            System.out.println("Error: Could not connect to server");
             e.printStackTrace();
+            System.exit(1);
         }
 
         // input
@@ -116,11 +118,13 @@ public class GameClient extends BasicGame implements IEventHandler {
     }
 
     /**
-     * From the server
+     * Handles packets received from the Server
+     *
+     * @param packet packet to process
      */
     @Override
     public void onPacketReceive(Packet packet) {
-        System.out.println("[game client] got packet from NetClient (" + client.isServer() + ") " + packet);
+        System.out.println("[Client] Got packet from server " + packet);
 
         // set world
         if (packet.getPacketType() == PacketType.World) {
@@ -129,12 +133,11 @@ public class GameClient extends BasicGame implements IEventHandler {
             world = ((WorldPacket) packet).getWorld();
 
             player = (PlayerEntity) world.getEntityFromID(client.getID());
-            player.addHandler(client);
+            player.addHandler(this::onEvent);
             world.getEntities().forEach(e -> {
                 if (e instanceof HumanEntity)
                     humanRenderers.add(new HumanEntityRenderer((HumanEntity) e).setDebug(true));
             });
-
 
             worldRenderer = new WorldRenderer(world);
 
@@ -150,14 +153,13 @@ public class GameClient extends BasicGame implements IEventHandler {
             if (cp.getPlayer().getID() == client.getID()) return;
 
             PlayerEntity newPlayer = cp.getPlayer();
-            newPlayer.addHandler(client);
+            newPlayer.addHandler(this::onEvent);
             world.addEntity(newPlayer);
             humanRenderers.add(new HumanEntityRenderer(newPlayer).setDebug(true));
         }
 
         // movement
         else if (packet.getPacketType() == PacketType.Move) {
-
             MoveEvent e = (MoveEvent) packet;
             if (e.getID() == client.getID())
                 return;
@@ -172,6 +174,26 @@ public class GameClient extends BasicGame implements IEventHandler {
         }
     }
 
+    /**
+     * Handles events locally created in the client
+     *
+     * @param packet event to be handled
+     */
+    public void onEvent(Packet packet) {
+        try {
+            switch (packet.getPacketType()) {
+                case Move:
+                case Input:
+                case Action:
+                    this.client.sendPacket(packet);
+                    break;
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * @return {username, server host}

@@ -1,7 +1,9 @@
 package memes.net.packet;
 
-public abstract class Packet {
-    private long sendTime, sender, recipient;
+import java.io.Serializable;
+
+public abstract class Packet implements Serializable {
+    protected long sendTime, sender, recipient;
 
     /**
      * Gets the Type of the Packet, useful for casting

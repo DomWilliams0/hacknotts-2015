@@ -24,14 +24,11 @@ public class GameServer implements IEventHandler {
     private World world;
 
     public GameServer() throws IOException {
-        netServer = new NetServer();
+        netServer = new NetServer(this);
         players = new ArrayList<>();
         entities = new ArrayList<>();
 
         world = FileOfficeGenerator.genWorld(160, 90);
-
-        // Start listening to connections
-        netServer.addIEventHandler(this);
     }
 
     public void start() {
@@ -40,16 +37,19 @@ public class GameServer implements IEventHandler {
     }
 
     /**
-     * From a single client: broadcast
-     *
+     * Called when a packet is received from a Client
      * @param packet packet to process
      */
     @Override
     public void onPacketReceive(Packet packet) {
+        System.out.println("[Server] Got packet from Client[" + packet.getSender() + "] " + packet);
         // new player joins
-        if (packet.getPacketType() == PacketType.Connect) {
+        if (packet.getPacketType() == PacketType.ConnectReq) {
             ConnectRequest cp = (ConnectRequest) packet;
             PlayerEntity player = world.playerConnected(cp.getID(), cp.getUsername());
+
+            netServer.send(new WorldPacket(world, netServer.getServerID()), cp.getID());
+            netServer.broadcast(new ConnectPacket(player), cp.getSender());
         }
 
         // movement
@@ -63,12 +63,8 @@ public class GameServer implements IEventHandler {
                 entity.startMoving(e.getDirection(), e.getSpeed());
             else
                 entity.stopMoving();
-        }
 
-        try {
-            netServer.broadcast(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
+            netServer.broadcast(e, e.getSender());
         }
     }
 

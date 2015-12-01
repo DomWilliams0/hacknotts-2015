@@ -15,26 +15,26 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetClient extends Thread implements IEventHandler {
+public class NetClient extends Thread {
     protected Socket socket;
     protected ObjectInputStream ois;
     protected ObjectOutputStream oos;
+
     protected long clientID;
-
     private long lastPacketTime;
+    private IEventHandler handler;
 
-    protected List<IEventHandler> handlers;
-
-    private boolean isServer;
-
-    public NetClient(Socket socket, long clientID, boolean isServer) throws IOException {
-        super("Client " + clientID);
+    public NetClient(Socket socket, long clientID, IEventHandler handler) throws IOException {
+        super("Client [" + clientID + "]");
 
         this.socket = socket;
-        this.isServer = isServer;
         this.clientID = clientID;
-        this.handlers = new ArrayList<>();
+        this.handler = handler;
         this.lastPacketTime = 0L;
+    }
+
+    public void setPacketHandler(IEventHandler handler) {
+        this.handler = handler;
     }
 
     @Override
@@ -49,58 +49,17 @@ public class NetClient extends Thread implements IEventHandler {
                     throw new UnsupportedOperationException("Received object is not a Packet. Uh wat");
 
                 Packet packet = (Packet) o;
-                System.out.println("[server: " + isServer + "] packet received = " + packet);
-
-
-                if (isServer) {
-                    if (packet.getSendTime() < lastPacketTime)
-                        return;
-
-                    lastPacketTime = packet.getSendTime();
-
-                    if (packet instanceof ConnectRequest) {
-                        ConnectRequest connPacket = (ConnectRequest) packet;
-
-                        World world = GameServer.INSTANCE.getWorld();
-                        PlayerEntity player = new PlayerEntity(
-                                connPacket.getID(),
-                                connPacket.getUsername(),
-                                world.getSpawnTile(connPacket.getID())
-                                        .multiply(Constants.TILE_SIZE)
-                                        .add(Constants.TILE_SIZE / 2)
-                        );
-
-                        world.addEntity(player);
-
-                        WorldPacket worldPacket = new WorldPacket(world);
-                        try {
-                            sendPacket(worldPacket);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-
-                handlers.forEach(h -> h.onPacketReceive(packet));
+                handler.onPacketReceive(packet);
 
             } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error reading packet");
                 try {
-                    socket.close();
+                    ois.skip(ois.available());
                 } catch (IOException e1) {
-                    break;
+                    System.out.println("Error clearing stream..");
                 }
-                break;
             }
         }
-    }
-
-    public void addPacketHandler(IEventHandler handler) {
-        handlers.add(handler);
-    }
-
-    public void removePacketHandler(IEventHandler handler) {
-        handlers.remove(handler);
     }
 
     /**
@@ -133,7 +92,7 @@ public class NetClient extends Thread implements IEventHandler {
 
         System.out.println("client's id = " + id);
 
-        return new NetClient(socket, id, false);
+        return new NetClient(socket, id, null);
     }
 
     /**
@@ -195,15 +154,30 @@ public class NetClient extends Thread implements IEventHandler {
     }
 
     public void sendPacket(Packet packet) throws IOException {
-        if (!socket.isClosed()) {
-            packet.setSendTime(System.nanoTime());
-            oos.writeObject(packet);
-        }
+        packet.setSender(clientID);
+        packet.setSendTime(System.nanoTime());
+        sendPacket(packet, clientID);
     }
-
-    public void sendText(String s) {
-        // TODO: Send message packets to client
-        throw new NotImplementedException();
+    /**
+     * Only to be used by the server to send as serverID
+     * @param packet
+     * @param sender
+     * @throws IOException
+     */
+    public void sendPacket(Packet packet, long sender) {
+        packet.setRecipient(clientID);
+        packet.setSendTime(System.nanoTime());
+        packet.getPacketType();
+        try {
+            if (!socket.isClosed()) {
+                oos.writeObject(packet);
+                oos.flush();
+            } else {
+                System.out.println("Socket is closed");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect() {
@@ -222,18 +196,4 @@ public class NetClient extends Thread implements IEventHandler {
         return socket;
     }
 
-
-    @Override
-    public void onPacketReceive(Packet event) {
-        try {
-            sendPacket(event);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public boolean isServer() {
-        return isServer;
-    }
 }
