@@ -1,5 +1,7 @@
 package memes.game.render;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import memes.GameClient;
 import memes.game.entity.PlayerEntity;
 import memes.game.world.Tile;
@@ -29,14 +31,20 @@ public class WorldRenderer {
     public Point getCamPos() {
         return camPos;
     }
+
+    /**
+     * Sets the given point in the middle of the screen
+     * @param camPos
+     */
     public void setCamPos(Point camPos) {
-        this.camPos = camPos;
+        this.camPos = new Point(
+                Constants.WINDOW_SIZE.getX() / 2 - camPos.getX(),
+                Constants.WINDOW_SIZE.getY() / 2 - camPos.getY()
+        ).multiply(-1);
     }
     /**
      * Render the world centred on x and y
      * @param graphics graphics to render to
-     * @param x the x component of the point to centre camera at
-     * @param x the y component of the point to centre camera at
      */
     public void render(Graphics graphics) {
         double xOffScreen = camPos.getX() % Constants.TILE_SIZE;
@@ -57,9 +65,15 @@ public class WorldRenderer {
 
                 Tile tile = world.getTile(x, y).get();
                 Image img;
-                if (tile.type.spriteX < 0 || tile.type.spriteY < 0) img = TextureManager.imageMap.get(tile.type.name);
-                else img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
-                tile.type.renderer.render(img, x * Constants.TILE_SIZE + (float) -camPos.getX(), y * Constants.TILE_SIZE + (float) -camPos.getY());
+                if (tile.type.spriteX < 0 || tile.type.spriteY < 0)
+                    img = TextureManager.imageMap.get(tile.type.name);
+                else
+                    img = TextureManager.sprites.getSubImage(tile.type.spriteX, tile.type.spriteY);
+
+                tile.type.renderer.render(img,
+                        (float) -camPos.getX() + x * Constants.TILE_SIZE,
+                        (float) -camPos.getY() + y * Constants.TILE_SIZE
+                );
 
                 // Add computer user label to render list if necessary
                 if (tile.type == TileType.COMPUTER) {
@@ -81,8 +95,7 @@ public class WorldRenderer {
             graphics.drawString(str, x, y);
         });
 
-
-        // gui
+        /* //TODO: Move GUI code
         PlayerEntity player = GameClient.INSTANCE.player;
 
         // draw caffeine bar
@@ -104,12 +117,6 @@ public class WorldRenderer {
         graphics.fillRect(85, PlayerEntity.MAX_RELAXATION * 3 - player.relaxationLevel * 3 + 60, 40, player.relaxationLevel * 3);
 
         graphics.setColor(Color.white);
-        graphics.drawString("Score: 1010101", 10, 100);
-
-        graphics.translate((float) -camX, (float) -camY);
-    }
-
-    public void centreOn(Point point) {
-        playerPos = new Point(point);
+        graphics.drawString("Score: 1010101", 10, 100);*/
     }
 }

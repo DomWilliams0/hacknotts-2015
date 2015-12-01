@@ -21,6 +21,7 @@ public class HumanEntityRenderer {
     private boolean playing, wasPlaying;
 
     private HumanEntity entity;
+    private boolean debug;
 
     public HumanEntityRenderer(HumanEntity humanEntity) {
         this.entity = humanEntity;
@@ -38,6 +39,10 @@ public class HumanEntityRenderer {
         playing = wasPlaying = false;
     }
 
+    public HumanEntityRenderer setDebug(boolean debug) {
+        this.debug = debug;
+        return this;
+    }
     public Animation getAnimation(Direction direction) {
         direction = direction.toRightAngle();
         Animation anim = this.anims.get(direction);
@@ -58,6 +63,12 @@ public class HumanEntityRenderer {
     }
 
     public void render(Graphics graphics, Point pixelPosition) {
+        graphics.pushTransform();
+        graphics.translate((float) Constants.WINDOW_SIZE.getX() / 2, (float) Constants.WINDOW_SIZE.getY() / 2);
+
+        graphics.pushTransform();
+        graphics.translate(-Constants.SPRITESHEET_HUMAN_SIZE / 2, -Constants.SPRITESHEET_HUMAN_SIZE * 4 / 5);
+
         // Draw Entity
         Animation anim = getAnimation(entity.getMovementDirection());
         anim.draw((float) pixelPosition.getX(), (float) pixelPosition.getY());
@@ -76,6 +87,28 @@ public class HumanEntityRenderer {
 
         graphics.setColor(Color.white);
         graphics.drawString(entity.getUsername(), nameX, nameY);
+
+        Point pos = entity.getPixelPosition();
+        if (debug) {
+
+            graphics.pushTransform();
+            graphics.translate((float) pos.getX(), (float) pos.getY());
+
+            Shape boundingBox = entity.getBoundingBox();
+            graphics.setColor(Color.green);
+            graphics.drawRect(0, 0, boundingBox.getWidth(), boundingBox.getHeight());
+
+            graphics.popTransform();
+        }
+
+        graphics.popTransform();
+
+        if (debug) {
+            graphics.setColor(Color.magenta);
+            graphics.drawOval(pos.getIntX() - 1, pos.getIntY() - 1, 2, 2);
+        }
+
+        graphics.popTransform();
     }
 
     public HumanEntity getEntity() {

@@ -53,8 +53,27 @@ public class Point implements Serializable {
     /**
      * @return This, but mutated
      */
+    public Point add(double xy) {
+        translate(xy, xy);
+        return this;
+    }
+
+    /**
+     * Subtracts a Point from the current Point
+     * @return This, but mutated
+     */
     public Point add(Point p) {
         translate(p.x, p.y);
+        return this;
+    }
+
+
+    /**
+     * Subtracts a Point from the current Point
+     * @return This, but mutated
+     */
+    public Point subtract(Point p) {
+        translate(-p.x, -p.y);
         return this;
     }
 
@@ -64,6 +83,15 @@ public class Point implements Serializable {
     public Point multiply(double scalar) {
         x *= scalar;
         y *= scalar;
+        return this;
+    }
+
+    /**
+     * @return This, but mutated
+     */
+    public Point divide(double scalar) {
+        x /= scalar;
+        y /= scalar;
         return this;
     }
 

@@ -132,7 +132,7 @@ public class GameClient extends BasicGame implements IEventHandler {
             player.addHandler(client);
             world.getEntities().forEach(e -> {
                 if (e instanceof HumanEntity)
-                    humanRenderers.add(new HumanEntityRenderer((HumanEntity) e));
+                    humanRenderers.add(new HumanEntityRenderer((HumanEntity) e).setDebug(true));
             });
 
 
@@ -152,7 +152,7 @@ public class GameClient extends BasicGame implements IEventHandler {
             PlayerEntity newPlayer = cp.getPlayer();
             newPlayer.addHandler(client);
             world.addEntity(newPlayer);
-            humanRenderers.add(new HumanEntityRenderer(newPlayer));
+            humanRenderers.add(new HumanEntityRenderer(newPlayer).setDebug(true));
         }
 
         // movement
@@ -218,17 +218,25 @@ public class GameClient extends BasicGame implements IEventHandler {
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
+
         // render world
-        if (worldRenderer != null) {
-            worldRenderer.centreOn(player.getPixelPosition());
+        if (worldRenderer != null && player != null) {
+            Shape playerBound = player.getBoundingBox();
+            Point playerPos = player.getPixelPosition();
+
+            Point camPos = new Point(
+                    playerPos.getX() - playerBound.getWidth() / 2,
+                    playerPos.getY() - playerBound.getHeight() / 2
+            );
+
+            worldRenderer.setCamPos(camPos);
             worldRenderer.render(graphics);
+
+            graphics.pushTransform();
+            graphics.translate((float) -camPos.getX(), (float) -camPos.getY());
+            humanRenderers.forEach(e -> e.render(graphics));
+            graphics.popTransform();
         }
-
-        humanRenderers.forEach(e -> {
-
-                e.render(graphics);
-        });
-
     }
 
     public World getWorld() {
