@@ -1,7 +1,5 @@
 package memes.net.packet;
 
-import memes.util.Point;
-
 import java.io.Serializable;
 
 public class ConnectRequest extends Packet implements Serializable {

@@ -1,9 +1,5 @@
 package memes.game.render;
 
-import com.sun.corba.se.impl.orbutil.closure.Constant;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-import memes.GameClient;
-import memes.game.entity.PlayerEntity;
 import memes.game.world.Tile;
 import memes.game.world.TileMetadata;
 import memes.game.world.TileType;

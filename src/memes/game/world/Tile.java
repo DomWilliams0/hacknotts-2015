@@ -1,10 +1,5 @@
 package memes.game.world;
 
-import memes.util.Constants;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-
 import java.io.Serializable;
 
 /**

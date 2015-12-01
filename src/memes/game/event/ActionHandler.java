@@ -32,5 +32,4 @@ public class ActionHandler implements IEventHandler {
                 break;
         }
     }
-
 }

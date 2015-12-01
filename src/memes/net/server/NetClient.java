@@ -1,19 +1,13 @@
 package memes.net.server;
 
-import memes.game.entity.PlayerEntity;
 import memes.game.event.IEventHandler;
-import memes.game.world.World;
 import memes.net.packet.ConnectRequest;
 import memes.net.packet.Packet;
-import memes.net.packet.ConnectPacket;
-import memes.net.packet.WorldPacket;
 import memes.util.Constants;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class NetClient extends Thread {
     protected Socket socket;

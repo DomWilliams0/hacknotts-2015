@@ -1,7 +1,6 @@
 package memes.util;
 
 import java.util.Arrays;
-import java.util.function.BinaryOperator;
 
 public enum Direction {
 

@@ -8,7 +8,6 @@ import memes.util.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Random;
 
 public class World implements Serializable {
 
