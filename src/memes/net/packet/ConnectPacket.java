@@ -19,4 +19,11 @@ public class ConnectPacket extends Packet implements Serializable {
     public PacketType getPacketType() {
         return PacketType.Connect;
     }
+
+    @Override
+    public String toString() {
+        return "ConnectPacket{" +
+                "player=" + player +
+                '}';
+    }
 }

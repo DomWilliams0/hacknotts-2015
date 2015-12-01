@@ -23,4 +23,12 @@ public class ConnectRequest extends Packet implements Serializable {
     public PacketType getPacketType() {
         return PacketType.ConnectReq;
     }
+
+    @Override
+    public String toString() {
+        return "ConnectRequest{" +
+                "username='" + username + '\'' +
+                ", entityID=" + entityID +
+                '}';
+    }
 }
